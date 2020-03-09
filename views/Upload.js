@@ -126,8 +126,18 @@ const Upload = (props) => {
 
   const reset = () => {
     setErrors({});
-    setInputs({});
+    setInputs({
+      make: '',
+      model: '',
+      year: '',
+      mileage: '',
+      gearbox: '',
+    });
     setImageProfile(null);
+    setImage2(null);
+    setImage3(null);
+    setImage4(null);
+    setImage5(null);
   };
 
   const getPermissionAsync = async () => {
@@ -278,7 +288,13 @@ const Upload = (props) => {
       regNoStatusOK = await regNoAvailable(inputs.regNo);
     }
 
-    if (regNoOK || priceOK || makeOK || modelOK || yearOK || mileageOK || gearboxOK || imageProfileOK || image2OK || image3OK || image4OK || image5OK) {
+    if (regNoOK && priceOK && makeOK && modelOK && yearOK && mileageOK && gearboxOK && imageProfileOK && image2OK && image3OK && image4OK && image5OK) {
+      console.log('inputsSetError still running');
+      setErrors((errors) => ({
+        ...errors,
+        inputsError: undefined,
+      }));
+    } else {
       setErrors((errors) => ({
         ...errors,
         inputsError: 'One or more fields require your attention',
@@ -325,22 +341,22 @@ const Upload = (props) => {
         <Spinner/>
       ) : (
         <Form>
-          <Item>
-            <FormTextInput
-              placeholder='Reg. No.'
-              onChangeText={handleRegNo}
-              value={inputs.regNo}
-              error={errors.regNo}
-            />
-          </Item>
-          <Item>
-            <FormTextInput
-              placeholder='Price'
-              onChangeText={handlePrice}
-              value={inputs.price}
-              error={errors.price}
-            />
-          </Item>
+
+          <FormTextInput
+            placeholder='Reg. No.'
+            onChangeText={handleRegNo}
+            value={inputs.regNo}
+            error={errors.regNo}
+          />
+
+
+          <FormTextInput
+            placeholder='Price'
+            onChangeText={handlePrice}
+            value={inputs.price}
+            error={errors.price}
+          />
+
           <Item style={{margin: 10}}>
             <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
               <Picker
@@ -485,7 +501,7 @@ const Upload = (props) => {
             <Text>Select Photo 1 (Profile)</Text>
           </Button>
           {errors.imageProfile &&
-            <Badge style={{width: '100%'}}><Text>{errors.imageProfile}</Text></Badge>
+            <Badge warning style={{width: '100%'}}><Text>{errors.imageProfile}</Text></Badge>
           }
           {image2 &&
           <Image source={{uri: image2.uri}}
@@ -495,7 +511,7 @@ const Upload = (props) => {
             <Text>Select Photo 2</Text>
           </Button>
           {errors.image2 &&
-            <Badge style={{width: '100%'}}><Text>{errors.image2}</Text></Badge>
+            <Badge warning style={{width: '100%'}}><Text>{errors.image2}</Text></Badge>
           }
           {image3 &&
           <Image source={{uri: image3.uri}}
@@ -505,7 +521,7 @@ const Upload = (props) => {
             <Text>Select Photo 3</Text>
           </Button>
           {errors.image3 &&
-            <Badge style={{width: '100%'}}><Text>{errors.image3}</Text></Badge>
+            <Badge warning style={{width: '100%'}}><Text>{errors.image3}</Text></Badge>
           }
           {image4 &&
           <Image source={{uri: image4.uri}}
@@ -515,7 +531,7 @@ const Upload = (props) => {
             <Text>Select Photo 4</Text>
           </Button>
           {errors.image4 &&
-            <Badge style={{width: '100%'}}><Text>{errors.image4}</Text></Badge>
+            <Badge warning style={{width: '100%'}}><Text>{errors.image4}</Text></Badge>
           }
           {image5 &&
           <Image source={{uri: image5.uri}}
@@ -525,7 +541,7 @@ const Upload = (props) => {
             <Text>Select Photo 5</Text>
           </Button>
           {errors.image5 &&
-            <Badge style={{width: '100%'}}><Text>{errors.image5}</Text></Badge>
+            <Badge warning style={{width: '100%'}}><Text>{errors.image5}</Text></Badge>
           }
           <Button style={{borderWidth: 1, borderColor: 'black', marginTop: 2}} full success onPress={upload}>
             <Text>Post Ad</Text>
