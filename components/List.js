@@ -35,8 +35,10 @@ const List = (props) => {
         }));
       }
       if (mode === 'favfiles') {
+        console.log('favfiles mode working');
         const token = await AsyncStorage.getItem('userToken');
         const myFavData = await getFavAds(token);
+        console.log('myFavData', myFavData);
         myFavData.forEach((ad) => {
           // console.log('ad.description', ad.description);
           ad.description = JSON.parse(ad.description);
@@ -237,7 +239,7 @@ const List = (props) => {
           }
           {props.mode === 'favfiles' &&
           <BaseList
-            dataArray={media.myFiles}
+            dataArray={media.favFiles}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => <ListItem
               navigation={props.navigation}

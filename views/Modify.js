@@ -326,7 +326,7 @@ const Modify = (props) => {
                   if (year === 'Select Year') {
                     return <Picker.Item label={year} value=''/>;
                   }
-                  return <Picker.Item label={year} value={year}/>
+                  return <Picker.Item label={year + ''} value={year} key={(item, index) => index.toString()}/>;
                 })}
               </Picker>
             </View>
@@ -356,7 +356,7 @@ const Modify = (props) => {
                   if (mileage === 'Select Mileage') {
                     return <Picker.Item label={mileage} value=''/>;
                   }
-                  return <Picker.Item label={mileage} value={mileage}/>
+                  return <Picker.Item label={mileage + ''} value={mileage} key={(item, index) => index.toString()}/>;
                 })}
               </Picker>
             </View>

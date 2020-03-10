@@ -165,7 +165,12 @@ const Single = (props) => {
     // const uData = JSON.parse(userFromStorage);
     const del = await fetchDELETE('favourites/file', file.file_id, token);
     if (del) {
-      navigation.state.params.filterAds();
+      if (navigation.state.params.mode === 'all') {
+        navigation.state.params.filterAds();
+      } else {
+        navigation.state.params.getMedia(navigation.state.params.mode);
+      }
+
       setShowFavBtn(true);
     }
     setLoading(false);
@@ -179,7 +184,11 @@ const Single = (props) => {
     };
     const response = await fetchPOST('favourites', dataObject, token);
     if (response.message) {
-      navigation.state.params.filterAds();
+      if (navigation.state.params.mode === 'all') {
+        navigation.state.params.filterAds();
+      } else {
+        navigation.state.params.getMedia(navigation.state.params.mode);
+      }
       setShowFavBtn(false);
     }
     setLoading(false);

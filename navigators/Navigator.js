@@ -12,6 +12,7 @@ import Upload from '../views/Upload';
 import {Icon} from 'native-base';
 import MyFiles from '../views/MyFiles';
 import Modify from '../views/Modify';
+import MyFavouritesList from '../views/MyFavouritesList';
 
 const TabNavigator = createBottomTabNavigator(
     {
@@ -77,6 +78,9 @@ const StackNavigator = createStackNavigator(
       },
       Logout: {
         screen: Login,
+      },
+      MyFavouritesList: {
+        screen: MyFavouritesList,
       },
     },
 );

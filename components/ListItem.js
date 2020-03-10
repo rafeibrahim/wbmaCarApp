@@ -42,7 +42,7 @@ const ListItem = (props) => {
       <Right>
         <Button onPress={
           () => {
-            props.navigation.push('Single', {file: props.singleMedia, filterAds: props.filterAds});
+            props.navigation.push('Single', {file: props.singleMedia, filterAds: props.filterAds, mode: props.mode, getMedia: props.getMedia});
           }
         }>
           <Icon name='eye'/>

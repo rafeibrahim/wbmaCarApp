@@ -89,8 +89,8 @@ const Profile = (props) => {
               }}>
                 <Text>My Files</Text>
               </Button>
-              <Button full onPress={() => {
-                props.navigation.push('MyFavouritiesList');
+              <Button full danger onPress={() => {
+                props.navigation.push('MyFavouritesList');
               }}>
                 <Text>My Favourites List</Text>
               </Button>
