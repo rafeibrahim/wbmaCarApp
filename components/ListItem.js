@@ -12,7 +12,7 @@ import {
 } from 'native-base';
 import PropTypes from 'prop-types';
 import {mediaURL} from '../constants/urlConst';
-import {fetchDELETE} from '../hooks/APIHooks';
+import {delCarAd} from '../hooks/APIHooks';
 import {AsyncStorage} from 'react-native';
 
 
@@ -63,10 +63,12 @@ const ListItem = (props) => {
             danger
             onPress={async () => {
               const token = await AsyncStorage.getItem('userToken');
-              const del = await fetchDELETE('media', props.singleMedia.file_id,
-                  token);
-              console.log('delete', del);
-              if (del.message) {
+              const del = await delCarAd(descriptionObject.regNo, token);
+              // const del = await fetchDELETE('media', props.singleMedia.file_id,
+              //     token);
+              // console.log('delete', del);
+              if (del) {
+                console.log(props.mode);
                 props.getMedia(props.mode);
               }
             }}

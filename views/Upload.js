@@ -259,6 +259,10 @@ const Upload = (props) => {
     const adsArray = await getAdsByTag(regNo);
     console.log('adsArrayBYregCheck', adsArray);
     if (adsArray.length === 0) {
+      setErrors((errors) => ({
+        ...errors,
+        regNoError: undefined,
+      }));
       return true;
     } else {
       setErrors((errors) => ({
@@ -303,7 +307,7 @@ const Upload = (props) => {
     console.log('reg field errors', errors);
     if (regNoOK && priceOK && makeOK && modelOK && yearOK && mileageOK && gearboxOK && imageProfileOK && image2OK && image3OK && image4OK && image5OK && regNoStatusOK) {
       console.log('upload btn working');
-      // handleUpload(imageProfile, props.navigation, setMedia);
+      handleUpload(imageProfile, image2, image3, image4, image5, props.navigation, setMedia);
       // reset();
     } else {
       console.log('upload btn not working');
@@ -467,8 +471,8 @@ const Upload = (props) => {
                 }
                 }>
                 <Item label="Select Gearbox" value="" />
-                <Item label="Automatic" value="Automatic" />
-                <Item label="Manual" value="Manual" />
+                <Item label="automatic" value="automatic" />
+                <Item label="manual" value="manual" />
               </Picker>
             </View>
           </Item>

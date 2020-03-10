@@ -36,6 +36,18 @@ const fetchPOST = async (endpoint = '', data = {}, token = '') => {
   return json;
 };
 
+const postTag = async (file_id, tag, token) => {
+  console.log('tag name', tag);
+  const reqObj = {
+    file_id,
+    tag,
+  };
+  console.log('reqObj', reqObj);
+  const json = await fetchPOST('tags', reqObj, token);
+  console.log('postTagResponse', json);
+  return json;
+};
+
 const fetchPUT = async (endpoint = '', params = '', data = {}, token = '') => {
   const fetchOptions = {
     method: 'PUT',
@@ -70,6 +82,19 @@ const fetchDELETE = async (endpoint = '', params = '', token = '') => {
     throw new Error('fetchDELETE error: ' + response.status);
   }
   return await response.json();
+};
+
+const delCarAd = async (regNo, token) => {
+  try {
+    const allAdPhotos = await getAdsByTag(regNo);
+    for (const photo of allAdPhotos) {
+      const del = await fetchDELETE('media', photo.file_id, token);
+      console.log('delete', del);
+    }
+    return true;
+  } catch (e) {
+    console.log('error from delCarAd from apihooks', e.message);
+  }
 };
 
 
@@ -121,6 +146,8 @@ const getAdsByTag = async (tag) => {
   return result;
 };
 
+
+
 const getUserMedia = async (token) => {
   console.log('im here', token);
   const json = await fetchGET('media/user', '', token);
@@ -135,6 +162,8 @@ export {
   getAllMedia,
   getAllAds,
   getAdsByTag,
+  delCarAd,
+  postTag,
   fetchGET,
   fetchPOST,
   fetchDELETE,

@@ -16,15 +16,29 @@ const List = (props) => {
   const getMedia = async (mode) => {
     try {
       console.log('mode', mode);
-      const allData = await getAllMedia();
-      const allAdData = await getAllAds();
-      const token = await AsyncStorage.getItem('userToken');
-      const myData = await getUserMedia(token);
-      setMedia({
-        allFiles: allData.reverse(),
-        myFiles: myData,
-        allAdFiles: allAdData,
-      });
+      // const allData = await getAllMedia();
+      // const allAdData = await getAllAds();
+      // const token = await AsyncStorage.getItem('userToken');
+      if ( mode === 'myfiles') {
+        const userFromStorage = await AsyncStorage.getItem('user');
+        const uData = JSON.parse(userFromStorage);
+        const myAdData = await getAdsByTag(uData.username);
+        // Parsing description as JSON and attaching it back to description property.
+        myAdData.forEach((ad) => {
+          // console.log('ad.description', ad.description);
+          ad.description = JSON.parse(ad.description);
+        });
+        // const myData = await getUserMedia(token);
+        setMedia((media) => ({
+          ...media,
+          myFiles: myAdData,
+        }));
+      }
+      // setMedia({
+      //   allFiles: allData.reverse(),
+      //   myFiles: myAdData,
+      //   allAdFiles: allAdData,
+      // });
       // console.log('allFiles', media.allFiles);
       // console.log('allAdFiles', media.allAdFiles);
       // setLoading(false);
@@ -54,7 +68,7 @@ const List = (props) => {
       // console.log('addList after first step', adList);
       // Parsing description as JSON and attaching it back to description property.
       adList.forEach((ad) => {
-        // console.log('ad.description', ad.description);
+        console.log('ad.description', ad.description);
         ad.description = JSON.parse(ad.description);
       });
       // Second Step: Filter pulled adList accordint to year
@@ -62,7 +76,8 @@ const List = (props) => {
       if (props.filters.year !== 'Select Year') {
         // Filtering according to year
         const adListByYear = adList.filter((ad) => {
-          if (ad.description.year === parseInt(props.filters.year, 10)) {
+          // if (ad.description.year === parseInt(props.filters.year, 10)) {
+          if (ad.description.year === props.filters.year) {
             return true;
           }
         });
@@ -152,13 +167,18 @@ const List = (props) => {
 
   useEffect(() => {
     // some function
-    filterAds();
+    if (props.mode === 'all') {
+      filterAds();
+    } else {
+      getMedia(props.mode);
+    }
   }, [props.filters]);
 
   useEffect(() => {
     console.log('useEffect function watching media context');
     // console.log(media.allAdFiles);
     // console.log('setting loading to false');
+    // getMedia(props.mode);
     setLoading(false);
   }, [media]);
 
