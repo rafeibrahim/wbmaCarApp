@@ -24,7 +24,7 @@ const SimpleCarousel = (props) => {
   let barArray = [];
 
   props.images.forEach((image, i) => {
-    console.log(image, i);
+    // console.log(image, i);
     const thisImage = (
       <Image
         key={`image${i}`}
@@ -33,7 +33,7 @@ const SimpleCarousel = (props) => {
       />
     );
     imageArray.push(thisImage);
-    console.log('imageArray', imageArray);
+    // console.log('imageArray', imageArray);
     const scrollBarVal = animVal.interpolate({
       inputRange: [deviceWidth * (i - 1), deviceWidth * (i + 1)],
       outputRange: [-itemWidth, itemWidth],
@@ -66,7 +66,7 @@ const SimpleCarousel = (props) => {
       </View>
     );
     barArray.push(thisBar);
-    console.log('barArray', barArray);
+    // console.log('barArray', barArray);
   });
 
   return (

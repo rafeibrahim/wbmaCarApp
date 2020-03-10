@@ -77,7 +77,7 @@ const Home = (props) => {
     }
 
     return <View style={{width: '100%', height: 40}}>
-        <Picker
+      <Picker
         mode="dropdown"
         selectedValue={filters.model}
         style={{width: '100%'}}
@@ -91,7 +91,10 @@ const Home = (props) => {
         }
         }>
         {displayModels.map((m) => {
-          return <Picker.Item label={m.modelLabel} value={m.model}/>
+          return <Picker.Item
+            label={m.modelLabel}
+            value={m.model}
+            key={(item, index) => index.toString()}/>;
         })}
       </Picker>
     </View>;
@@ -175,7 +178,7 @@ const Home = (props) => {
           }
           }>
           {years1.map((year) => {
-            return <Picker.Item label={year} value={year}/>
+            return <Picker.Item label={year + ''} value={year} key={(item, index) => index.toString()}/>;
           })}
         </Picker>
       </View>

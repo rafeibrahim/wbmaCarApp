@@ -131,7 +131,11 @@ const getAllMedia = async () => {
 const getAllAds = async () => {
   const json = await fetchGET('tags/carAppProfile');
   const result = await Promise.all(json.map(async (item) => {
-    return await fetchGET('media', item.file_id);
+    const adFile = await fetchGET('media', item.file_id);
+    const listOfFavs = await fetchGET('favourites/file', item.file_id);
+    adFile.favList = listOfFavs;
+    return adFile;
+    // return await fetchGET('media', item.file_id);
   }));
   return result;
 };
@@ -141,11 +145,26 @@ const getAdsByTag = async (tag) => {
   console.log('tag name', tag);
   const json = await fetchGET('tags/carApp' + tag);
   const result = await Promise.all(json.map(async (item) => {
-    return await fetchGET('media', item.file_id);
+    const adFile = await fetchGET('media', item.file_id);
+    const listOfFavs = await fetchGET('favourites/file', item.file_id);
+    adFile.favList = listOfFavs;
+    return adFile;
+    // return await fetchGET('media', item.file_id);
   }));
   return result;
 };
 
+const getFavAds = async (token) => {
+  const json = await fetchGET('favourites', '', token);
+  const result = await Promise.all(json.map(async (item) => {
+    const adFile = await fetchGET('media', item.file_id);
+    const listOfFavs = await fetchGET('favourites/file', item.file_id);
+    adFile.favList = listOfFavs;
+    return adFile;
+    // return await fetchGET('media', item.file_id);
+  }));
+  return result;
+};
 
 
 const getUserMedia = async (token) => {
@@ -162,6 +181,7 @@ export {
   getAllMedia,
   getAllAds,
   getAdsByTag,
+  getFavAds,
   delCarAd,
   postTag,
   fetchGET,

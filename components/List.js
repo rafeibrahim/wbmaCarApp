@@ -5,7 +5,7 @@ import {
 } from 'native-base';
 import ListItem from './ListItem';
 import {MediaContext} from '../contexts/MediaContext';
-import {getAllMedia, getAllAds, getAdsByTag, getUserMedia} from '../hooks/APIHooks';
+import {getAllMedia, getAllAds, getAdsByTag, getUserMedia, getFavAds} from '../hooks/APIHooks';
 import PropTypes from 'prop-types';
 import {AsyncStorage} from 'react-native';
 
@@ -32,6 +32,18 @@ const List = (props) => {
         setMedia((media) => ({
           ...media,
           myFiles: myAdData,
+        }));
+      }
+      if (mode === 'favfiles') {
+        const token = await AsyncStorage.getItem('userToken');
+        const myFavData = await getFavAds(token);
+        myFavData.forEach((ad) => {
+          // console.log('ad.description', ad.description);
+          ad.description = JSON.parse(ad.description);
+        });
+        setMedia((media) => ({
+          ...media,
+          favFiles: myFavData,
         }));
       }
       // setMedia({
@@ -206,6 +218,7 @@ const List = (props) => {
               singleMedia={item}
               mode={props.mode}
               getMedia={getMedia}
+              filterAds={filterAds}
             />}
           />
           }
@@ -218,6 +231,20 @@ const List = (props) => {
               singleMedia={item}
               mode={props.mode}
               getMedia={getMedia}
+              filterAds={filterAds}
+            />}
+          />
+          }
+          {props.mode === 'favfiles' &&
+          <BaseList
+            dataArray={media.myFiles}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => <ListItem
+              navigation={props.navigation}
+              singleMedia={item}
+              mode={props.mode}
+              getMedia={getMedia}
+              filterAds={filterAds}
             />}
           />
           }

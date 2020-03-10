@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import AsyncImage from '../components/AsyncImage';
 import {Dimensions, Image} from 'react-native';
 import {mediaURL} from '../constants/urlConst';
-import {fetchGET} from '../hooks/APIHooks';
+import {fetchGET, fetchDELETE, fetchPOST} from '../hooks/APIHooks';
 import {AsyncStorage} from 'react-native';
 import {getAllMedia, getAllAds, getAdsByTag, getUserMedia} from '../hooks/APIHooks';
 import SimpleCarousel from '../components/SimpleCarousel';
@@ -110,7 +110,8 @@ const cardsArray2 = [
 const Single = (props) => {
   const [user, setUser] = useState({});
   const [adFiles, setAdFiles] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [showFavBtn, setShowFavBtn] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const {navigation} = props;
   const file = navigation.state.params.file;
@@ -138,6 +139,52 @@ const Single = (props) => {
     }
   };
 
+  const addFavBtnToggler = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    const favList = await fetchGET('favourites', '', token);
+    console.log('favList', favList);
+    const adExists = favList.some((favObj) => {
+      if (file.file_id === favObj.file_id) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    console.log('adExists', adExists);
+    if (adExists) {
+      setShowFavBtn(false);
+    } else {
+      setShowFavBtn(true);
+    }
+  };
+
+  const removeFromFavList = async () => {
+    setLoading(true);
+    const token = await AsyncStorage.getItem('userToken');
+    // const userFromStorage = await AsyncStorage.getItem('user');
+    // const uData = JSON.parse(userFromStorage);
+    const del = await fetchDELETE('favourites/file', file.file_id, token);
+    if (del) {
+      navigation.state.params.filterAds();
+      setShowFavBtn(true);
+    }
+    setLoading(false);
+  };
+
+  const addToFavList = async () => {
+    setLoading(true);
+    const token = await AsyncStorage.getItem('userToken');
+    const dataObject = {
+      file_id: file.file_id,
+    };
+    const response = await fetchPOST('favourites', dataObject, token);
+    if (response.message) {
+      navigation.state.params.filterAds();
+      setShowFavBtn(false);
+    }
+    setLoading(false);
+  };
+
   const getAdImages = async () => {
     try {
       const adArray = await getAdsByTag(file.description.regNo);
@@ -150,6 +197,7 @@ const Single = (props) => {
   useEffect(() => {
     // getUser();
     getAdImages();
+    addFavBtnToggler();
   }, []);
 
   // useEffect(() => {
@@ -209,6 +257,21 @@ const Single = (props) => {
           <Text>GearBox: {file.description.gearbox}</Text>
         </ListItem>
       </List>
+      <View style={{marginBottom: 20}}>
+        {showFavBtn && <Button
+          full
+          danger
+          onPress={addToFavList}>
+          <Text><Icon name='heart' style={{fontSize: 24, color: 'pink'}}></Icon> Add to Favourites <Icon name='heart' style={{fontSize: 24, color: 'pink'}}/></Text>
+        </Button>}
+        {!showFavBtn && <Button
+          full
+          warning
+          onPress={removeFromFavList}
+          >
+          <Text style={{color: 'black'}}><Icon name='heart' style={{fontSize: 24, color: 'black'}}></Icon> Remove from Favourites <Icon name='heart' style={{fontSize: 24, color: 'black'}}/></Text>
+        </Button>}
+      </View>
     </>
 
   );

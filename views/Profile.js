@@ -89,6 +89,11 @@ const Profile = (props) => {
               }}>
                 <Text>My Files</Text>
               </Button>
+              <Button full onPress={() => {
+                props.navigation.push('MyFavouritiesList');
+              }}>
+                <Text>My Favourites List</Text>
+              </Button>
               <Button full dark onPress={signOutAsync}>
                 <Text>Logout</Text>
               </Button>
