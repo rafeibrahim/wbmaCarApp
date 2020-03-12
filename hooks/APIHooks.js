@@ -26,7 +26,7 @@ const fetchPOST = async (endpoint = '', data = {}, token = '') => {
   };
   const response = await fetch(apiUrl + endpoint, fetchOptions);
   const json = await response.json();
-  console.log(json);
+  // console.log(json);
   if (response.status === 400 || response.status === 401) {
     const message = Object.values(json).join();
     throw new Error(message);
@@ -36,15 +36,15 @@ const fetchPOST = async (endpoint = '', data = {}, token = '') => {
   return json;
 };
 
-const postTag = async (file_id, tag, token) => {
+const postTag = async (fileId, tag, token) => {
   console.log('tag name', tag);
   const reqObj = {
-    file_id,
+    file_id: fileId,
     tag,
   };
-  console.log('reqObj', reqObj);
+  // console.log('reqObj', reqObj);
   const json = await fetchPOST('tags', reqObj, token);
-  console.log('postTagResponse', json);
+  // console.log('postTagResponse', json);
   return json;
 };
 
@@ -59,7 +59,7 @@ const fetchPUT = async (endpoint = '', params = '', data = {}, token = '') => {
   };
   const response = await fetch(apiUrl + endpoint + '/' + params, fetchOptions);
   const json = await response.json();
-  console.log(json);
+  // console.log(json);
   if (response.status === 400 || response.status === 401) {
     const message = Object.values(json).join();
     throw new Error(message);
@@ -89,11 +89,11 @@ const delCarAd = async (regNo, token) => {
     const allAdPhotos = await getAdsByTag(regNo);
     for (const photo of allAdPhotos) {
       const del = await fetchDELETE('media', photo.file_id, token);
-      console.log('delete', del);
+      // console.log('delete', del);
     }
     return true;
   } catch (e) {
-    console.log('error from delCarAd from apihooks', e.message);
+    console.log('delCarAd error', e.message);
   }
 };
 
@@ -109,7 +109,7 @@ const fetchFormData = async (
   };
   const response = await fetch(apiUrl + endpoint, fetchOptions);
   const json = await response.json();
-  console.log(json);
+  // console.log(json);
   if (response.status === 400 || response.status === 401) {
     const message = Object.values(json).join();
     throw new Error(message);
@@ -119,13 +119,14 @@ const fetchFormData = async (
   return json;
 };
 
-const getAllMedia = async () => {
-  const json = await fetchGET('media/all');
-  const result = await Promise.all(json.files.map(async (item) => {
-    return await fetchGET('media', item.file_id);
-  }));
-  return result;
-};
+// For fetching all media files posted to media API
+// const getAllMedia = async () => {
+//   const json = await fetchGET('media/all');
+//   const result = await Promise.all(json.files.map(async (item) => {
+//     return await fetchGET('media', item.file_id);
+//   }));
+//   return result;
+// };
 
 // get media tagged as carAppProfile
 const getAllAds = async () => {
@@ -135,7 +136,6 @@ const getAllAds = async () => {
     const listOfFavs = await fetchGET('favourites/file', item.file_id);
     adFile.favList = listOfFavs;
     return adFile;
-    // return await fetchGET('media', item.file_id);
   }));
   return result;
 };
@@ -149,7 +149,6 @@ const getAdsByTag = async (tag) => {
     const listOfFavs = await fetchGET('favourites/file', item.file_id);
     adFile.favList = listOfFavs;
     return adFile;
-    // return await fetchGET('media', item.file_id);
   }));
   return result;
 };
@@ -161,7 +160,6 @@ const getFavAds = async (token) => {
     const listOfFavs = await fetchGET('favourites/file', item.file_id);
     adFile.favList = listOfFavs;
     return adFile;
-    // return await fetchGET('media', item.file_id);
   }));
   return result;
 };
@@ -178,7 +176,6 @@ const getUserMedia = async (token) => {
 
 // eslint-disable-next-line max-len
 export {
-  getAllMedia,
   getAllAds,
   getAdsByTag,
   getFavAds,

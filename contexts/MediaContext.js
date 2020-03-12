@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 const MediaContext = React.createContext([{}, () => {}]);
 
 const mediaObject = {
-  allFiles: [],
   myFiles: [],
   allAdFiles: [],
   favFiles: [],

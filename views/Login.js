@@ -12,6 +12,7 @@ import {
   H2,
   Card,
   CardItem,
+  Icon,
 } from 'native-base';
 import {
   AsyncStorage,
@@ -93,7 +94,7 @@ const Login = (props) => {
   return (
     <Container>
       <Header>
-        <Body><Title>MyApp</Title></Body>
+        <Body><Title style={{color: 'royalblue'}}> <Icon name="car"></Icon>  CARAPP  <Icon name="car"></Icon></Title></Body>
       </Header>
       <Content>
         {/* login form */}

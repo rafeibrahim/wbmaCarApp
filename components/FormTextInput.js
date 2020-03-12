@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input, Body, Badge, Item, Text, View} from 'native-base';
+import {Input, Badge, Item, Text, View} from 'native-base';
 import PropTypes from 'prop-types';
 
 const FormTextInput = (props) => {
@@ -7,7 +7,11 @@ const FormTextInput = (props) => {
   return (
     <>
       <Item style={{margin: 10}}>
-        <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black'}}>
+        <View
+          style={{width: '100%',
+            height: 40,
+            borderWidth: 1,
+            borderColor: 'black'}}>
           <Input
             {...otherProps}
           />

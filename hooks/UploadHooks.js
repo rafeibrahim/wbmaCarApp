@@ -1,6 +1,10 @@
 import {useState} from 'react';
 import {AsyncStorage} from 'react-native';
-import {fetchFormData, fetchPUT, getAllMedia, getAdsByTag, getAllAds, getUserMedia, postTag} from './APIHooks';
+import {fetchFormData,
+  fetchPUT,
+  getAdsByTag,
+  getAllAds,
+  postTag} from './APIHooks';
 
 const initialInputs = {
   make: '',
@@ -110,7 +114,8 @@ const useUploadForm = () => {
     setLoading(true);
     const userFromStorage = await AsyncStorage.getItem('user');
     const uData = JSON.parse(userFromStorage);
-    // {"regNo":"JKL-456","make":"Audi","model":"A6","year":2020,"engine":"2.0","fuel":"diesel","gearbox":"automatic","mileage":5000,"price"64000}
+
+    // making car description object which will be stringified
     const carAdDescriptionObject = {
       regNo: inputs.regNo,
       make: inputs.make,
@@ -125,7 +130,7 @@ const useUploadForm = () => {
       ownerEmail: uData.email,
     };
 
-    console.log('carAdDescriptionObject', carAdDescriptionObject);
+    // console.log('carAdDescriptionObject', carAdDescriptionObject);
 
     const profileImageFilename = profileImageFile.uri.split('/').pop();
     const profileImageMatch = /\.(\w+)$/.exec(profileImageFilename);
@@ -171,33 +176,63 @@ const useUploadForm = () => {
 
     const profileImageFd = new FormData();
     profileImageFd.append('title', inputs.regNo);
-    profileImageFd.append('description', JSON.stringify(carAdDescriptionObject));
-    profileImageFd.append('file', {uri: profileImageFile.uri, name: profileImageFilename, type: profileImageType});
-    console.log('profileImageFD:', profileImageFd);
+    profileImageFd.append(
+        'description',
+        JSON.stringify(carAdDescriptionObject));
+    profileImageFd.append(
+        'file',
+        {uri: profileImageFile.uri,
+          name: profileImageFilename,
+          type: profileImageType});
+    // console.log('profileImageFD:', profileImageFd);
 
     const image2Fd = new FormData();
     image2Fd.append('title', inputs.regNo);
-    image2Fd.append('description', JSON.stringify(carAdDescriptionObject));
-    image2Fd.append('file', {uri: image2File.uri, name: image2Filename, type: image2Type});
-    console.log('image2Fd: ', image2Fd);
+    image2Fd.append(
+        'description',
+        JSON.stringify(carAdDescriptionObject));
+    image2Fd.append(
+        'file',
+        {uri: image2File.uri,
+          name: image2Filename,
+          type: image2Type});
+    // console.log('image2Fd: ', image2Fd);
 
     const image3Fd = new FormData();
     image3Fd.append('title', inputs.regNo);
-    image3Fd.append('description', JSON.stringify(carAdDescriptionObject));
-    image3Fd.append('file', {uri: image3File.uri, name: image3Filename, type: image3Type});
-    console.log('image3Fd: ', image3Fd);
+    image3Fd.append(
+        'description',
+        JSON.stringify(carAdDescriptionObject));
+    image3Fd.append(
+        'file',
+        {uri: image3File.uri,
+          name: image3Filename,
+          type: image3Type});
+    // console.log('image3Fd: ', image3Fd);
 
     const image4Fd = new FormData();
     image4Fd.append('title', inputs.regNo);
-    image4Fd.append('description', JSON.stringify(carAdDescriptionObject));
-    image4Fd.append('file', {uri: image4File.uri, name: image4Filename, type: image4Type});
-    console.log('image4Fd: ', image4Fd);
+    image4Fd.append(
+        'description',
+        JSON.stringify(carAdDescriptionObject));
+    image4Fd.append(
+        'file',
+        {uri: image4File.uri,
+          name: image4Filename,
+          type: image4Type});
+    // console.log('image4Fd: ', image4Fd);
 
     const image5Fd = new FormData();
     image5Fd.append('title', inputs.regNo);
-    image5Fd.append('description', JSON.stringify(carAdDescriptionObject));
-    image5Fd.append('file', {uri: image5File.uri, name: image5Filename, type: image5Type});
-    console.log('image3Fd: ', image5Fd);
+    image5Fd.append(
+        'description',
+        JSON.stringify(carAdDescriptionObject));
+    image5Fd.append(
+        'file',
+        {uri: image5File.uri,
+          name: image5Filename,
+          type: image5Type});
+    // console.log('image3Fd: ', image5Fd);
 
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -206,8 +241,9 @@ const useUploadForm = () => {
       const resp3 = await fetchFormData('media', image3Fd, token);
       const resp4 = await fetchFormData('media', image4Fd, token);
       const resp5 = await fetchFormData('media', image5Fd, token);
-      console.log('upl resp', resp1);
-      if (resp1.message && resp2.message && resp3.message && resp4.message && resp5.message) {
+      // console.log('upl resp', resp1);
+      if (resp1.message && resp2.message &&
+          resp3.message && resp4.message && resp5.message) {
         await postTag(resp1.file_id, 'carApp', token);
         await postTag(resp1.file_id, 'carAppProfile', token);
         await postTag(resp1.file_id, 'carApp' + inputs.make, token);

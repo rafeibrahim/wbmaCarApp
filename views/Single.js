@@ -150,9 +150,9 @@ const Single = (props) => {
                         Owner Details
                   </Text>
                 </ListItem>
-                <ListItem>
+                {file.description.ownerName && <ListItem>
                   <Text>Name: {file.description.ownerName}</Text>
-                </ListItem>
+                </ListItem>}
                 <ListItem>
                   <Text>Email: {file.description.ownerEmail}</Text>
                 </ListItem>

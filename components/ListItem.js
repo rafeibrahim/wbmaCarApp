@@ -7,7 +7,6 @@ import {
   Button,
   Text,
   Thumbnail,
-  H3,
   Icon,
 } from 'native-base';
 import PropTypes from 'prop-types';
@@ -29,21 +28,30 @@ const ListItem = (props) => {
         />
       </Left>
       <Body>
-        <Text numberOfLines={1} style={{fontWeight: 'bold'}}>
-          {} {descriptionObject.model} <Text style={{fontSize: 14, fontWeight: 'normal'}}>{descriptionObject.engine}</Text>
+        <Text
+          numberOfLines={1}
+          style={{fontWeight: 'bold'}}>
+          {descriptionObject.model} <Text
+            style={{fontSize: 14, fontWeight: 'normal'}}>
+            {descriptionObject.engine}</Text>
         </Text>
         <Text numberOfLines={1} style={{fontSize: 14}}>
           {descriptionObject.year} | {descriptionObject.fuel} | {descriptionObject.gearbox}
         </Text>
         <Text numberOfLines={1} style={{fontSize: 14}}>
-          {descriptionObject.mileage} km | <Text style={{color: 'cornflowerblue', fontSize: 14, fontWeight: 'bold'}}>{descriptionObject.price}€</Text> | {hearts > 0 && <Text style={{color: 'pink', fontWeight: 'bold'}}>{hearts}<Icon name='heart' style={{fontSize: 18, color: 'pink'}}/></Text>}
+          {descriptionObject.mileage} km | <Text
+            style={{color: 'cornflowerblue', fontSize: 14, fontWeight: 'bold'}}>
+            {descriptionObject.price}€</Text> | {hearts > 0 && <Text style={{color: 'pink', fontWeight: 'bold'}}>{hearts}<Icon name='heart' style={{fontSize: 18, color: 'pink'}}/></Text>}
         </Text>
       </Body>
       <Right>
         <Button onPress={
           () => {
-            console.log('filters unitl listItem', props.filters);
-            props.navigation.push('Single', {file: props.singleMedia, filterAds: props.filterAds, mode: props.mode, getMedia: props.getMedia, filters: props.filters});
+            props.navigation.push(
+                'Single',
+                {file: props.singleMedia,
+                  mode: props.mode,
+                  getMedia: props.getMedia});
           }
         }>
           <Icon name='eye'/>
@@ -55,7 +63,10 @@ const ListItem = (props) => {
             warning
             onPress={
               () => {
-                props.navigation.push('Modify', {file: props.singleMedia, getMedia: props.getMedia});
+                props.navigation.push(
+                    'Modify',
+                    {file: props.singleMedia,
+                      getMedia: props.getMedia});
               }
             }
           >
@@ -67,9 +78,6 @@ const ListItem = (props) => {
             onPress={async () => {
               const token = await AsyncStorage.getItem('userToken');
               const del = await delCarAd(descriptionObject.regNo, token);
-              // const del = await fetchDELETE('media', props.singleMedia.file_id,
-              //     token);
-              // console.log('delete', del);
               if (del) {
                 console.log(props.mode);
                 props.getMedia('updateAll');

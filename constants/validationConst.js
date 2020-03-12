@@ -37,22 +37,6 @@ const registerConstraints = {
 };
 
 const uploadConstraints = {
-  // title: {
-  //   presence: {
-  //     message: 'cannot be blank.',
-  //   },
-  //   length: {
-  //     minimum: 3,
-  //     message: 'must be at least 3 characters',
-  //   },
-  // },
-  // description: {
-  //   format: {
-  //     pattern: '^(.{3,})?$',
-  //     flags: 'i',
-  //     message: 'must be at least 3 characters',
-  //   },
-  // },
   regNo: {
     presence: {
       message: 'cannot be blank',
