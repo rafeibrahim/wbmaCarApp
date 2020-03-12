@@ -9,6 +9,7 @@ const mediaObject = {
   myFiles: [],
   allAdFiles: [],
   favFiles: [],
+  homeScreenFilters: {},
 };
 
 const MediaProvider = (props) => {

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   Container,
   Content,
@@ -22,6 +22,7 @@ import {mediaURL} from '../constants/urlConst';
 import {fetchGET, fetchDELETE, fetchPOST} from '../hooks/APIHooks';
 import {AsyncStorage} from 'react-native';
 import {getAllMedia, getAllAds, getAdsByTag, getUserMedia} from '../hooks/APIHooks';
+import {MediaContext} from '../contexts/MediaContext';
 import SimpleCarousel from '../components/SimpleCarousel';
 
 const deviceHeight = Dimensions.get('window').height;
@@ -108,6 +109,7 @@ const cardsArray2 = [
 //   singleAdImages: [],
 // };
 const Single = (props) => {
+  const [media, setMedia] = useContext(MediaContext);
   const [user, setUser] = useState({});
   const [adFiles, setAdFiles] = useState([]);
   const [showFavBtn, setShowFavBtn] = useState(true);
@@ -164,13 +166,9 @@ const Single = (props) => {
     // const userFromStorage = await AsyncStorage.getItem('user');
     // const uData = JSON.parse(userFromStorage);
     const del = await fetchDELETE('favourites/file', file.file_id, token);
+    console.log('filters received as prop', navigation.state.params.filters);
     if (del) {
-      if (navigation.state.params.mode === 'all') {
-        navigation.state.params.filterAds();
-      } else {
-        navigation.state.params.getMedia(navigation.state.params.mode);
-      }
-
+      navigation.state.params.getMedia('updateAll');
       setShowFavBtn(true);
     }
     setLoading(false);
@@ -183,12 +181,9 @@ const Single = (props) => {
       file_id: file.file_id,
     };
     const response = await fetchPOST('favourites', dataObject, token);
+    console.log('filters received as prop', navigation.state.params.filters);
     if (response.message) {
-      if (navigation.state.params.mode === 'all') {
-        navigation.state.params.filterAds();
-      } else {
-        navigation.state.params.getMedia(navigation.state.params.mode);
-      }
+      navigation.state.params.getMedia('updateAll');
       setShowFavBtn(false);
     }
     setLoading(false);
@@ -207,6 +202,7 @@ const Single = (props) => {
     // getUser();
     getAdImages();
     addFavBtnToggler();
+    console.log('fromMediaContext', media.homeScreenFilters);
   }, []);
 
   // useEffect(() => {

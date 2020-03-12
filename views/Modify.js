@@ -121,6 +121,7 @@ const Modify = (props) => {
   };
 
   const file = props.navigation.state.params.file;
+  const getMedia = props.navigation.state.params.getMedia;
   const descriptionObject = file.description;
   console.log('descriptionObject', descriptionObject);
 
@@ -217,7 +218,7 @@ const Modify = (props) => {
         ...errors,
         inputsError: undefined,
       }));
-      handleModify(file.file_id, props.navigation, setMedia);
+      handleModify(file.file_id, props.navigation, setMedia, getMedia);
     } else {
       console.log('modify btn not working');
       setErrors((errors) => ({

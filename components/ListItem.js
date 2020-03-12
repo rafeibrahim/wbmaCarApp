@@ -36,13 +36,14 @@ const ListItem = (props) => {
           {descriptionObject.year} | {descriptionObject.fuel} | {descriptionObject.gearbox}
         </Text>
         <Text numberOfLines={1} style={{fontSize: 14}}>
-          {descriptionObject.mileage} km | <Text style={{color: 'cornflowerblue', fontSize: 14, fontWeight: 'bold'}}>{descriptionObject.price}€</Text> | <Text style={{color: 'black'}}>{hearts} <Icon name='heart' style={{fontSize: 18, color: 'pink'}}/></Text>
+          {descriptionObject.mileage} km | <Text style={{color: 'cornflowerblue', fontSize: 14, fontWeight: 'bold'}}>{descriptionObject.price}€</Text> | {hearts > 0 && <Text style={{color: 'pink', fontWeight: 'bold'}}>{hearts}<Icon name='heart' style={{fontSize: 18, color: 'pink'}}/></Text>}
         </Text>
       </Body>
       <Right>
         <Button onPress={
           () => {
-            props.navigation.push('Single', {file: props.singleMedia, filterAds: props.filterAds, mode: props.mode, getMedia: props.getMedia});
+            console.log('filters unitl listItem', props.filters);
+            props.navigation.push('Single', {file: props.singleMedia, filterAds: props.filterAds, mode: props.mode, getMedia: props.getMedia, filters: props.filters});
           }
         }>
           <Icon name='eye'/>
@@ -54,7 +55,7 @@ const ListItem = (props) => {
             warning
             onPress={
               () => {
-                props.navigation.push('Modify', {file: props.singleMedia});
+                props.navigation.push('Modify', {file: props.singleMedia, getMedia: props.getMedia});
               }
             }
           >
@@ -71,7 +72,7 @@ const ListItem = (props) => {
               // console.log('delete', del);
               if (del) {
                 console.log(props.mode);
-                props.getMedia(props.mode);
+                props.getMedia('updateAll');
               }
             }}
           >

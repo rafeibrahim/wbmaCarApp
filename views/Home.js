@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import List from '../components/List';
+import {MediaContext} from '../contexts/MediaContext';
 import PropTypes from 'prop-types';
 import {View, Picker, Item} from 'native-base';
 import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, years, years1} from '../constants/optionsConst';
@@ -58,6 +59,7 @@ const Home = (props) => {
   };
   const {navigation} = props;
   const [filters, setFilters] = useState(initialFilters);
+  const [media, setMedia] = useContext(MediaContext);
   const displayModelPicker = () => {
     if (filters.make === 'Profile') {
       return null;
@@ -99,6 +101,14 @@ const Home = (props) => {
       </Picker>
     </View>;
   };
+
+  useEffect(() => {
+    setMedia((mediia) => ({
+      ...media,
+      homeScreenFilters: filters,
+    }));
+  }, [filters]);
+
   return (
     <>
       <View style={{width: '100%', height: 40}}>
@@ -203,7 +213,7 @@ const Home = (props) => {
           <Picker.Item label='Year: NewestFirst' value='newestCarFirst' />
         </Picker>
       </View>
-      <List navigation={navigation} mode={'all'} filters={filters}></List>
+      <List navigation={navigation} mode={'all'}></List>
     </>
   );
 };

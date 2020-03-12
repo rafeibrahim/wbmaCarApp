@@ -222,7 +222,7 @@ const useUploadForm = () => {
     }
   };
 
-  const handleModify = async (id, navigation, setMedia) => {
+  const handleModify = async (id, navigation, setMedia, getMedia) => {
     try {
       setLoading(true);
       const userFromStorage = await AsyncStorage.getItem('user');
@@ -260,6 +260,7 @@ const useUploadForm = () => {
             ...media,
             myFiles: myAdData,
           }));
+        getMedia('updateAll');
         setLoading(false);
         navigation.pop();
       }
