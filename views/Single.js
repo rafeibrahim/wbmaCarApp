@@ -15,15 +15,17 @@ import {
   List,
   ListItem,
 } from 'native-base';
+
 import PropTypes from 'prop-types';
 import AsyncImage from '../components/AsyncImage';
-import {Dimensions, Image} from 'react-native';
+import {Dimensions, Image, ScrollView, SafeAreaView} from 'react-native';
 import {mediaURL} from '../constants/urlConst';
 import {fetchGET, fetchDELETE, fetchPOST} from '../hooks/APIHooks';
 import {AsyncStorage} from 'react-native';
 import {getAllMedia, getAllAds, getAdsByTag, getUserMedia} from '../hooks/APIHooks';
 import {MediaContext} from '../contexts/MediaContext';
 import SimpleCarousel from '../components/SimpleCarousel';
+
 
 const deviceHeight = Dimensions.get('window').height;
 const initState = [
@@ -241,50 +243,54 @@ const Single = (props) => {
       >
         <Text>Add Card</Text>
       </Button> */}
-      <List>
-        <ListItem>
-          <Text>Year Model: {file.description.year}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Engine: {file.description.engine}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Rek. nro: {file.description.regNo}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Mileage: {file.description.mileage}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Drive: Front Wheel</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Location: Espoo</Text>
-        </ListItem>
-        <ListItem>
-          <Text>GearBox: {file.description.gearbox}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Year Model: {file.description.year}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Engine: {file.description.engine}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Rek. nro: {file.description.regNo}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Mileage: {file.description.mileage}</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Drive: Front Wheel</Text>
-        </ListItem>
-        <ListItem>
-          <Text>Location: Espoo</Text>
-        </ListItem>
-        <ListItem>
-          <Text>GearBox: {file.description.gearbox}</Text>
-        </ListItem>
-      </List>
+      <View style={{height: deviceHeight / 2}}>
+        <SafeAreaView style={{flex: 1}}>
+          <ScrollView style={{}}>
+            <List>
+              <ListItem itemDivider style={{backgroundColor: 'grey', justifyContent: 'center'}}>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}} >Car Details</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Reg. No: {file.description.regNo}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Make: {file.description.model}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Year: {file.description.year}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Mileage: {file.description.mileage}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Engine: {file.description.engine}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>GearBox: {file.description.gearbox}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Fuel Type: {file.description.fuel}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Engine: {file.description.engine}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Price {file.description.price}</Text>
+              </ListItem>
+              <ListItem itemDivider style={{backgroundColor: 'grey', justifyContent: 'center'}}>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Owner Details</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Name: {file.description.ownerName}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>Email: {file.description.ownerEmail}</Text>
+              </ListItem>
+            </List>
+          </ScrollView>
+        </SafeAreaView>
+      </View>
+
       <View style={{marginBottom: 20}}>
         {showFavBtn && <Button
           full
