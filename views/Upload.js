@@ -24,7 +24,7 @@ import useUploadForm from '../hooks/UploadHooks';
 import {MediaContext} from '../contexts/MediaContext';
 import {validateField} from '../utils/validation';
 import {uploadConstraints} from '../constants/validationConst';
-import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, years, years1, mileageList, gearboxList} from '../constants/optionsConst';
+import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, engineList, yearList, mileageList} from '../constants/optionsConst';
 import {getAdsByTag} from '../hooks/APIHooks';
 const deviceHeight = Dimensions.get('window').height;
 
@@ -43,8 +43,10 @@ const Upload = (props) => {
     handleMakeChange,
     handleModelChange,
     handleYearChange,
+    handleEngineChange,
     handleMileageChange,
     handleGearboxChange,
+    handleFuelChange,
     handleRegNoChange,
     handlePriceChange,
     handleUpload,
@@ -194,6 +196,11 @@ const Upload = (props) => {
     checkPickerError('year', text);
   };
 
+  const handleEngine = (text) => {
+    handleEngineChange(text);
+    checkPickerError('engine', text);
+  };
+
   const handleMileage = (text) => {
     handleMileageChange(text);
     checkPickerError('mileage', text);
@@ -202,6 +209,11 @@ const Upload = (props) => {
   const handleGearbox = (text) => {
     handleGearboxChange(text);
     checkPickerError('gearbox', text);
+  };
+
+  const handleFuel = (text) => {
+    handleFuelChange(text);
+    checkPickerError('fuel', text);
   };
 
   const handleRegNo = (text) => {
@@ -280,8 +292,10 @@ const Upload = (props) => {
     const makeOK = checkPickerError('make', inputs.make);
     const modelOK = checkPickerError('model', inputs.model);
     const yearOK = checkPickerError('year', inputs.year);
+    const engineOK = checkPickerError('engine', inputs.engine);
     const mileageOK = checkPickerError('mileage', inputs.mileage);
     const gearboxOK = checkPickerError('gearbox', inputs.gearbox);
+    const fuelOK = checkPickerError('fuel', inputs.fuel);
     const imageProfileOK = checkPhotoError('imageProfile', imageProfile);
     const image2OK = checkPhotoError('image2', image2);
     const image3OK = checkPhotoError('image3', image3);
@@ -292,7 +306,7 @@ const Upload = (props) => {
       regNoStatusOK = await regNoAvailable(inputs.regNo);
     }
 
-    if (regNoOK && priceOK && makeOK && modelOK && yearOK && mileageOK && gearboxOK && imageProfileOK && image2OK && image3OK && image4OK && image5OK) {
+    if (regNoOK && priceOK && makeOK && modelOK && yearOK && engineOK && mileageOK && gearboxOK && fuelOK && imageProfileOK && image2OK && image3OK && image4OK && image5OK) {
       console.log('inputsSetError still running');
       setErrors((errors) => ({
         ...errors,
@@ -305,7 +319,7 @@ const Upload = (props) => {
       }));
     }
     console.log('reg field errors', errors);
-    if (regNoOK && priceOK && makeOK && modelOK && yearOK && mileageOK && gearboxOK && imageProfileOK && image2OK && image3OK && image4OK && image5OK && regNoStatusOK) {
+    if (regNoOK && priceOK && makeOK && modelOK && yearOK && engineOK && mileageOK && gearboxOK && fuelOK && imageProfileOK && image2OK && image3OK && image4OK && image5OK && regNoStatusOK) {
       console.log('upload btn working');
       handleUpload(imageProfile, image2, image3, image4, image5, props.navigation, setMedia);
       // reset();
@@ -408,7 +422,7 @@ const Upload = (props) => {
                   //   }));
                 }
                 }>
-                {years1.map((year) => {
+                {yearList.map((year) => {
                   // console.log(years.reverse());
                   // console.log('year', year);
                   if (year === 'Select Year') {
@@ -478,6 +492,65 @@ const Upload = (props) => {
           </Item>
           {errors.gearbox &&
             <Badge warning style={{width: '100%'}}><Text>{errors.gearbox}</Text></Badge>
+          }
+          <Item style={{margin: 10}}>
+            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+              <Picker
+                mode="dropdown"
+                selectedValue={inputs.fuel}
+                style={{width: '100%'}}
+                itemStyle={{height: 44}}
+                onValueChange={(itemValue, itemIndex) => {
+                  console.log(itemValue);
+                  handleFuel(itemValue);
+                  // setFilters((filters) =>
+                  //   ({
+                  //     ...filters,
+                  //     make: itemValue,
+                  //     model: '',
+                  //   }));
+                }
+                }>
+                <Item label="Select Fuel Type" value="" />
+                <Item label="petrol" value="automatic" />
+                <Item label="diesel" value="manual" />
+                <Item label="hybrid" value="hybrid"/>
+                <Item label="electric" value="electric" />
+              </Picker>
+            </View>
+          </Item>
+          {errors.fuel &&
+            <Badge warning style={{width: '100%'}}><Text>{errors.fuel}</Text></Badge>
+          }
+          <Item style={{margin: 10}}>
+            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+              <Picker
+                mode="dropdown"
+                selectedValue={inputs.engine}
+                style={{width: '100%'}}
+                onValueChange={(itemValue, itemIndex) => {
+                  console.log(itemValue);
+                  handleEngine(itemValue);
+                  // setFilters((filters) =>
+                  //   ({
+                  //     ...filters,
+                  //     year: itemValue,
+                  //   }));
+                }
+                }>
+                {engineList.map((engine) => {
+                  // console.log(years.reverse());
+                  // console.log('year', year);
+                  if (engine === 'Select Engine Capacity') {
+                    return <Picker.Item label={engine} value=''/>;
+                  }
+                  return <Picker.Item label={engine} value={engine} key={(item, index) => index.toString()}/>;
+                })}
+              </Picker>
+            </View>
+          </Item>
+          {errors.engine &&
+            <Badge warning style={{width: '100%'}}><Text>{errors.engine}</Text></Badge>
           }
           {/* <Item>
             <FormTextInput

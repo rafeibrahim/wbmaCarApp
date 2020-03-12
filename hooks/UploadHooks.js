@@ -6,8 +6,10 @@ const initialInputs = {
   make: '',
   model: '',
   year: '',
+  engine: '',
   mileage: '',
   gearbox: '',
+  fuel: '',
 };
 
 const useUploadForm = () => {
@@ -40,6 +42,14 @@ const useUploadForm = () => {
       }));
   };
 
+  const handleEngineChange = (text) => {
+    setInputs((inputs) =>
+      ({
+        ...inputs,
+        engine: text,
+      }));
+  };
+
   const handleMileageChange = (text) => {
     setInputs((inputs) =>
       ({
@@ -53,6 +63,14 @@ const useUploadForm = () => {
       ({
         ...inputs,
         gearbox: text,
+      }));
+  };
+
+  const handleFuelChange = (text) => {
+    setInputs((inputs) =>
+      ({
+        ...inputs,
+        fuel: text,
       }));
   };
 
@@ -98,8 +116,8 @@ const useUploadForm = () => {
       make: inputs.make,
       model: inputs.model,
       year: inputs.year,
-      engine: '2.0',
-      fuel: 'diesel',
+      engine: inputs.engine,
+      fuel: inputs.fuel,
       gearbox: inputs.gearbox,
       mileage: inputs.mileage,
       price: parseInt(inputs.price, 10),
@@ -275,8 +293,10 @@ const useUploadForm = () => {
     handleMakeChange,
     handleModelChange,
     handleYearChange,
+    handleEngineChange,
     handleMileageChange,
     handleGearboxChange,
+    handleFuelChange,
     handleRegNoChange,
     handlePriceChange,
     handleUpload,

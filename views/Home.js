@@ -3,54 +3,9 @@ import List from '../components/List';
 import {MediaContext} from '../contexts/MediaContext';
 import PropTypes from 'prop-types';
 import {View, Picker, Item} from 'native-base';
-import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, years, years1} from '../constants/optionsConst';
+import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels} from '../constants/optionsConst';
 
 const Home = (props) => {
-  // console.log('Home', props);
-  // const bmwModels = [
-  //   {'model': '', 'modelLabel': 'Select Model'},
-  //   {'model': 'Bmw118', 'modelLabel': '118'},
-  //   {'model': 'Bmw320', 'modelLabel': '320'},
-  //   {'model': 'Bmw330', 'modelLabel': '330'},
-  //   {'model': 'Bmw340', 'modelLabel': '340'},
-  // ];
-  // const toyotaModels = [
-  //   {'model': '', 'modelLabel': 'Select Model'},
-  //   {'model': 'ToyotaAvensis', 'modelLabel': 'Avensis'},
-  //   {'model': 'ToyotaAuris', 'modelLabel': 'Auris'},
-  //   {'model': 'ToyotaCorolla', 'modelLabel': 'Corolla'},
-  //   {'model': 'ToyotaYaris', 'modelLabel': 'Yaris'},
-  // ];
-  // const audiModels = [
-  //   {'model': '', 'modelLabel': 'Select Model'},
-  //   {'model': 'AudiA1', 'modelLabel': 'A1'},
-  //   {'model': 'AudiA2', 'modelLabel': 'A2'},
-  //   {'model': 'AudiA3', 'modelLabel': 'A3'},
-  //   {'model': 'AudiA4', 'modelLabel': 'A4'},
-  //   {'model': 'AudiA5', 'modelLabel': 'A5'},
-  //   {'model': 'AudiA6', 'modelLabel': 'A6'},
-  //   {'model': 'AudiA7', 'modelLabel': 'A7'},
-  // ];
-  // const mercedesModels = [
-  //   {'model': '', 'modelLabel': 'Select Model'},
-  //   {'model': 'MercedesC200', 'modelLabel': 'C200'},
-  //   {'model': 'MercedesE300', 'modelLabel': 'E300'},
-  //   {'model': 'MercedesS550', 'modelLabel': 'S550'},
-  //   {'model': 'MercedesA180', 'modelLabel': 'A180'},
-  // ];
-  // const hondaModels = [
-  //   {'model': '', 'modelLabel': 'Select Model'},
-  //   {'model': 'HondaAccord', 'modelLabel': 'Accord'},
-  //   {'model': 'HondaCivic', 'modelLabel': 'Civic'},
-  //   {'model': 'HondaClarity', 'modelLabel': 'Clarity'},
-  //   {'model': 'MercedesA180', 'modelLabel': 'A180'},
-  // ];
-  // const years = ['1990', '1991', '1992', '1993', '1994', '1995',
-  //   '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003',
-  //   '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011',
-  //   '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019',
-  //   '2020', 'Select Year'];
-
   const initialFilters = {
     make: 'Profile',
     model: '',
@@ -60,6 +15,18 @@ const Home = (props) => {
   const {navigation} = props;
   const [filters, setFilters] = useState(initialFilters);
   const [media, setMedia] = useContext(MediaContext);
+
+  const yearArrayConstructor = () => {
+    let yearArray = ['Select Year'];
+    for (let i = 2020; i > 1969; i--) {
+      yearArray = [...yearArray, i];
+    }
+    return yearArray;
+  };
+
+  const yearList = yearArrayConstructor();
+  console.log('yearList', yearList);
+
   const displayModelPicker = () => {
     if (filters.make === 'Profile') {
       return null;
@@ -187,7 +154,7 @@ const Home = (props) => {
               }));
           }
           }>
-          {years1.map((year) => {
+          {yearList.map((year) => {
             return <Picker.Item label={year + ''} value={year} key={(item, index) => index.toString()}/>;
           })}
         </Picker>

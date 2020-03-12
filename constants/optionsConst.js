@@ -35,87 +35,37 @@ const hondaModels = [
   {'model': 'HondaCivic', 'modelLabel': 'Civic'},
   {'model': 'HondaClarity', 'modelLabel': 'Clarity'},
 ];
-const years = ['1990', '1991', '1992', '1993', '1994', '1995',
-  '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003',
-  '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011',
-  '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019',
-  '2020', 'Select Year'];
 
-const mileageList = ['Select Mileage', 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000,
-  90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000,
-  190000, 200000, 210000, 220000, 230000, 240000, 250000, 260000, 270000, 280000, 290000,
-  300000];
+const engineArrayConstructor = () => {
+  let engineArray = ['Select Engine Capacity'];
+  for (let i = 0; i < 5.1; i = i + 0.1) {
+    engineArray = [...engineArray, Number.parseFloat(i).toFixed(1)];
+  }
+  return engineArray;
+};
 
-const gearboxList = ['Select Gearbox', 'automatic', 'manual'];
+const engineList = engineArrayConstructor();
+console.log('engineList', engineList);
 
-const years1 = [
-  'Select Year',
-  2020,
-  2019,
-  2018,
-  2017,
-  2016,
-  2015,
-  2014,
-  2013,
-  2012,
-  2011,
-  2010,
-  2009,
-  2008,
-  2007,
-  2006,
-  2005,
-  2004,
-  2003,
-  2002,
-  2001,
-  2000,
-  1999,
-  1998,
-  1997,
-  1996,
-  1995,
-  1994,
-  1993,
-  1992,
-  1991,
-  1990,
-];
+const yearArrayConstructor = () => {
+  let yearArray = ['Select Year'];
+  for (let i = 2020; i > 1969; i--) {
+    yearArray = [...yearArray, i];
+  }
+  return yearArray;
+};
 
-// const years1 = [
-//   "Select Year",
-//   "2020",
-//   "2019",
-//   "2018",
-//   "2017",
-//   "2016",
-//   "2015",
-//   "2014",
-//   "2013",
-//   "2012",
-//   "2011",
-//   "2010",
-//   "2009",
-//   "2008",
-//   "2007",
-//   "2006",
-//   "2005",
-//   "2004",
-//   "2003",
-//   "2002",
-//   "2001",
-//   "2000",
-//   "1999",
-//   "1998",
-//   "1997",
-//   "1996",
-//   "1995",
-//   "1994",
-//   "1993",
-//   "1992",
-//   "1991",
-//   "1990",
-//   ];
+const yearList = yearArrayConstructor();
+console.log('yearList', yearList);
 
-export {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, years, years1, mileageList, gearboxList};
+const mileageArrayConstructor = () => {
+  let mileageArray = ['Select Mileage'];
+  for (let i = 5000; i < 505000; i += 5000) {
+    mileageArray = [...mileageArray, i];
+  }
+  return mileageArray;
+};
+const mileageList = mileageArrayConstructor();
+console.log('mileageList', mileageList);
+
+export {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, engineList, yearList, mileageList};

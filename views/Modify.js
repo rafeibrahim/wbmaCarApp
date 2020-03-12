@@ -21,7 +21,7 @@ import useUploadForm from '../hooks/UploadHooks';
 import {MediaContext} from '../contexts/MediaContext';
 import {validateField} from '../utils/validation';
 import {uploadConstraints} from '../constants/validationConst';
-import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, years, years1, mileageList, gearboxList} from '../constants/optionsConst';
+import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, engineList, yearList, mileageList} from '../constants/optionsConst';
 import {mediaURL} from '../constants/urlConst';
 import AsyncImage from '../components/AsyncImage';
 import {Video} from 'expo-av';
@@ -38,8 +38,10 @@ const Modify = (props) => {
     handleMakeChange,
     handleModelChange,
     handleYearChange,
+    handleEngineChange,
     handleMileageChange,
     handleGearboxChange,
+    handleFuelChange,
     handleRegNoChange,
     handlePriceChange,
     handleModify,
@@ -158,6 +160,11 @@ const Modify = (props) => {
     checkPickerError('year', text);
   };
 
+  const handleEngine = (text) => {
+    handleEngineChange(text);
+    checkPickerError('engine', text);
+  };
+
   const handleMileage = (text) => {
     handleMileageChange(text);
     checkPickerError('mileage', text);
@@ -166,6 +173,11 @@ const Modify = (props) => {
   const handleGearbox = (text) => {
     handleGearboxChange(text);
     checkPickerError('gearbox', text);
+  };
+
+  const handleFuel = (text) => {
+    handleFuelChange(text);
+    checkPickerError('fuel', text);
   };
 
   const handleRegNo = (text) => {
@@ -321,7 +333,7 @@ const Modify = (props) => {
                   //   }));
                 }
                 }>
-                {years1.map((year) => {
+                {yearList.map((year) => {
                   // console.log(years.reverse());
                   // console.log('year', year);
                   if (year === 'Select Year') {
@@ -391,6 +403,65 @@ const Modify = (props) => {
           </Item>
           {errors.gearbox &&
             <Badge warning style={{width: '100%'}}><Text>{errors.gearbox}</Text></Badge>
+          }
+                    <Item style={{margin: 10}}>
+            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+              <Picker
+                mode="dropdown"
+                selectedValue={inputs.fuel}
+                style={{width: '100%'}}
+                itemStyle={{height: 44}}
+                onValueChange={(itemValue, itemIndex) => {
+                  console.log(itemValue);
+                  handleFuel(itemValue);
+                  // setFilters((filters) =>
+                  //   ({
+                  //     ...filters,
+                  //     make: itemValue,
+                  //     model: '',
+                  //   }));
+                }
+                }>
+                <Item label="Select Fuel Type" value="" />
+                <Item label="petrol" value="automatic" />
+                <Item label="diesel" value="manual" />
+                <Item label="hybrid" value="hybrid"/>
+                <Item label="electric" value="electric" />
+              </Picker>
+            </View>
+          </Item>
+          {errors.fuel &&
+            <Badge warning style={{width: '100%'}}><Text>{errors.fuel}</Text></Badge>
+          }
+          <Item style={{margin: 10}}>
+            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+              <Picker
+                mode="dropdown"
+                selectedValue={inputs.engine}
+                style={{width: '100%'}}
+                onValueChange={(itemValue, itemIndex) => {
+                  console.log(itemValue);
+                  handleEngine(itemValue);
+                  // setFilters((filters) =>
+                  //   ({
+                  //     ...filters,
+                  //     year: itemValue,
+                  //   }));
+                }
+                }>
+                {engineList.map((engine) => {
+                  // console.log(years.reverse());
+                  // console.log('year', year);
+                  if (engine === 'Select Engine Capacity') {
+                    return <Picker.Item label={engine} value=''/>;
+                  }
+                  return <Picker.Item label={engine} value={engine} key={(item, index) => index.toString()}/>;
+                })}
+              </Picker>
+            </View>
+          </Item>
+          {errors.engine &&
+            <Badge warning style={{width: '100%'}}><Text>{errors.engine}</Text></Badge>
           }
           <Button full onPress={modify}>
             <Text>Modify</Text>
