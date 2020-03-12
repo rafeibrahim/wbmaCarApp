@@ -268,7 +268,7 @@ const Modify = (props) => {
             value={inputs.price + ''}
             error={errors.price}
           />
-          <Text style={{textAlign: 'center', marginTop: 0, fontWeight: 'bold', color: 'royalblue'}}>MAKE</Text>
+          {/* <Text style={{textAlign: 'center', marginTop: 0, fontWeight: 'bold', color: 'royalblue'}}>MAKE</Text>
           <Item style={{margin: 10}}>
             <View
               style={{width: '100%',
@@ -302,7 +302,7 @@ const Modify = (props) => {
               <Text>{errors.make}</Text>
             </Badge>
           }
-          {displayModelPicker()}
+          {displayModelPicker()} */}
           <Text
             style={{textAlign: 'center',
               marginTop: 0,
