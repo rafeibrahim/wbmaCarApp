@@ -268,6 +268,7 @@ const Modify = (props) => {
             value={inputs.price + ''}
             error={errors.price}
           />
+          {/* {Disabled because it hinders filter operation on home screen} */}
           {/* <Text style={{textAlign: 'center', marginTop: 0, fontWeight: 'bold', color: 'royalblue'}}>MAKE</Text>
           <Item style={{margin: 10}}>
             <View
