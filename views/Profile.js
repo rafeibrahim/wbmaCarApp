@@ -78,7 +78,8 @@ const Profile = (props) => {
           </CardItem>
           <CardItem>
             <Body>
-              <Text>Fullname: {user.userdata.full_name}</Text>
+              {user.userdata.full_name &&
+              <Text>Fullname: {user.userdata.full_name}</Text>}
               <Text numberOfLines={1}>email: {user.userdata.email}</Text>
             </Body>
           </CardItem>

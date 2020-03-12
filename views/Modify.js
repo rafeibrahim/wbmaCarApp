@@ -9,6 +9,7 @@ import {
   View,
   Picker,
   Badge,
+  H3,
 } from 'native-base';
 
 import {
@@ -78,6 +79,7 @@ const Modify = (props) => {
     }
 
     return <>
+      <Text style={{textAlign: 'center', marginTop: 0, fontWeight: 'bold', color: 'royalblue'}}>MODEL</Text>
       <Item style={{margin: 10}}>
         <View
           style={{width: '100%',
@@ -259,12 +261,14 @@ const Modify = (props) => {
             spinnerColor='#777'
             source={{uri: mediaURL + file.filename}}
           />
+          <Text style={{textAlign: 'center', marginTop: 10, fontWeight: 'bold', color: 'royalblue'}}>PRICE</Text>
           <FormTextInput
             placeholder='Price'
             onChangeText={handlePrice}
             value={inputs.price + ''}
             error={errors.price}
           />
+          <Text style={{textAlign: 'center', marginTop: 0, fontWeight: 'bold', color: 'royalblue'}}>MAKE</Text>
           <Item style={{margin: 10}}>
             <View
               style={{width: '100%',
@@ -299,6 +303,11 @@ const Modify = (props) => {
             </Badge>
           }
           {displayModelPicker()}
+          <Text
+            style={{textAlign: 'center',
+              marginTop: 0,
+              fontWeight: 'bold',
+              color: 'royalblue'}}>YEAR</Text>
           <Item style={{margin: 10}}>
             <View
               style={{width: '100%',
@@ -334,6 +343,11 @@ const Modify = (props) => {
               <Text>{errors.year}</Text>
             </Badge>
           }
+          <Text
+            style={{textAlign: 'center',
+              marginTop: 0,
+              fontWeight: 'bold',
+              color: 'royalblue'}}>MILEAGE</Text>
           <Item style={{margin: 10}}>
             <View
               style={{width: '100%',
@@ -371,6 +385,11 @@ const Modify = (props) => {
               <Text>{errors.mileage}</Text>
             </Badge>
           }
+          <Text
+            style={{textAlign: 'center',
+              marginTop: 0,
+              fontWeight: 'bold',
+              color: 'royalblue'}}>GEARBOX</Text>
           <Item style={{margin: 10}}>
             <View
               style={{width: '100%',
@@ -401,6 +420,11 @@ const Modify = (props) => {
               <Text>{errors.gearbox}</Text>
             </Badge>
           }
+          <Text
+            style={{textAlign: 'center',
+              marginTop: 0,
+              fontWeight: 'bold',
+              color: 'royalblue'}}>FUEL TYPE</Text>
           <Item style={{margin: 10}}>
             <View
               style={{width: '100%',
@@ -419,8 +443,8 @@ const Modify = (props) => {
                 }
                 }>
                 <Item label="Select Fuel Type" value="" />
-                <Item label="petrol" value="automatic" />
-                <Item label="diesel" value="manual" />
+                <Item label="petrol" value="petrol" />
+                <Item label="diesel" value="diesel" />
                 <Item label="hybrid" value="hybrid"/>
                 <Item label="electric" value="electric" />
               </Picker>
@@ -433,6 +457,11 @@ const Modify = (props) => {
               <Text>{errors.fuel}</Text>
             </Badge>
           }
+          <Text
+            style={{textAlign: 'center',
+              marginTop: 0,
+              fontWeight: 'bold',
+              color: 'royalblue'}}>ENGINE CAPACITY</Text>
           <Item style={{margin: 10}}>
             <View
               style={

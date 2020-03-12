@@ -535,8 +535,8 @@ const Upload = (props) => {
                 }
                 }>
                 <Item label="Select Fuel Type" value="" />
-                <Item label="petrol" value="automatic" />
-                <Item label="diesel" value="manual" />
+                <Item label="petrol" value="petrol" />
+                <Item label="diesel" value="diesel" />
                 <Item label="hybrid" value="hybrid"/>
                 <Item label="electric" value="electric" />
               </Picker>
