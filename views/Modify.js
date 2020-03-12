@@ -326,7 +326,10 @@ const Modify = (props) => {
                 }>
                 {yearList.map((year) => {
                   if (year === 'Select Year') {
-                    return <Picker.Item label={year} value=''/>;
+                    return <Picker.Item
+                      label={year}
+                      value=''
+                      key={(item, index) => index.toString()}/>;
                   }
                   return <Picker.Item
                     label={year + ''}
