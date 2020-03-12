@@ -211,7 +211,7 @@ const Single = (props) => {
   // }, [singleAdMedia]);
 
   return (
-    <>
+    <View style={{flex: 1}}>
       {/* <Container>
         <View>
           <Text>{file.title}</Text>
@@ -228,7 +228,9 @@ const Single = (props) => {
             }
           />
           } */}
-      <SimpleCarousel images={adFiles}/>
+      <View style ={{width: '100%', height: deviceHeight / 3}}>
+        <SimpleCarousel images={adFiles}/>
+      </View>
       {/* </View>
       </Container> */}
       {/* <Button
@@ -240,6 +242,27 @@ const Single = (props) => {
         <Text>Add Card</Text>
       </Button> */}
       <List>
+        <ListItem>
+          <Text>Year Model: {file.description.year}</Text>
+        </ListItem>
+        <ListItem>
+          <Text>Engine: {file.description.engine}</Text>
+        </ListItem>
+        <ListItem>
+          <Text>Rek. nro: {file.description.regNo}</Text>
+        </ListItem>
+        <ListItem>
+          <Text>Mileage: {file.description.mileage}</Text>
+        </ListItem>
+        <ListItem>
+          <Text>Drive: Front Wheel</Text>
+        </ListItem>
+        <ListItem>
+          <Text>Location: Espoo</Text>
+        </ListItem>
+        <ListItem>
+          <Text>GearBox: {file.description.gearbox}</Text>
+        </ListItem>
         <ListItem>
           <Text>Year Model: {file.description.year}</Text>
         </ListItem>
@@ -273,12 +296,11 @@ const Single = (props) => {
           full
           warning
           onPress={removeFromFavList}
-          >
+        >
           <Text style={{color: 'black'}}><Icon name='heart' style={{fontSize: 24, color: 'black'}}></Icon> Remove from Favourites <Icon name='heart' style={{fontSize: 24, color: 'black'}}/></Text>
         </Button>}
       </View>
-    </>
-
+    </View>
   );
 };
 

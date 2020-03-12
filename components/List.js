@@ -128,6 +128,8 @@ const List = (props) => {
       adList.sort((a, b) => a.description.year - b.description.year);
     } else if (sortMethod === 'newestCarFirst') {
       adList.sort((a, b) => b.description.year - a.description.year);
+    } else if (sortMethod === 'topFavourite') {
+      adList.sort((a, b) => b.favList.length - a.favList.length);
     } else {
       return adList;
     }

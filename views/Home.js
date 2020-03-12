@@ -178,6 +178,7 @@ const Home = (props) => {
           <Picker.Item label='Price: Lowest First' value="cheapestFirst" />
           <Picker.Item label='Year: Oldest First' value="oldestCarFirst" />
           <Picker.Item label='Year: NewestFirst' value='newestCarFirst' />
+          <Picker.Item label='Top Favourite' value='topFavourite' />
         </Picker>
       </View>
       <List navigation={navigation} mode={'all'}></List>
