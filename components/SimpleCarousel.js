@@ -89,8 +89,8 @@ const SimpleCarousel = (props) => {
         <View
           style={styles.skip}
         >
-          <Text style={{backgroundColor: '#fff', color: '#F44', textAlign: 'center', alignItems: 'center',
-            justifyContent: 'center'}}>skip</Text>
+          {/* <Text style={{backgroundColor: '#fff', color: '#F44', textAlign: 'center', alignItems: 'center',
+            justifyContent: 'center'}}>skip</Text> */}
         </View>
       </ScrollView>
       <View
@@ -122,12 +122,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   track: {
-    backgroundColor: '#ccc',
+    // backgroundColor: '#ccc',
+    backgroundColor: 'red',
     overflow: 'hidden',
     height: 2,
   },
   bar: {
-    backgroundColor: '#5294d6',
+    // backgroundColor: '#5294d6',
+    backgroundColor: 'yellow',
     height: 2,
     position: 'absolute',
     left: 0,
