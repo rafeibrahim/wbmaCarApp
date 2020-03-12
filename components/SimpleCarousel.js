@@ -1,18 +1,15 @@
-import React, {Component} from 'react';
-import {Animated, View, StyleSheet, Image, Dimensions, ScrollView, Text} from 'react-native';
+import React from 'react';
+import {Animated,
+  View,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ScrollView} from 'react-native';
 import {mediaURL} from '../constants/urlConst';
-
+import PropTypes from 'prop-types';
 const deviceWidth = Dimensions.get('window').width;
 const FIXED_BAR_WIDTH = 280;
 const BAR_SPACE = 10;
-
-// const images = [
-//   'https://s-media-cache-ak0.pinimg.com/originals/ee/51/39/ee5139157407967591081ee04723259a.png',
-//   'https://s-media-cache-ak0.pinimg.com/originals/40/4f/83/404f83e93175630e77bc29b3fe727cbe.jpg',
-//   'https://s-media-cache-ak0.pinimg.com/originals/8d/1a/da/8d1adab145a2d606c85e339873b9bb0e.jpg',
-// ];
-
-// export default class App extends Component {
 
 const SimpleCarousel = (props) => {
   const numItems = props.images.length;
@@ -20,8 +17,8 @@ const SimpleCarousel = (props) => {
   const animVal = new Animated.Value(0);
 
 
-  let imageArray = [];
-  let barArray = [];
+  const imageArray = [];
+  const barArray = [];
 
   props.images.forEach((image, i) => {
     // console.log(image, i);
@@ -52,7 +49,6 @@ const SimpleCarousel = (props) => {
         ]}
       >
         <Animated.View
-
           style={[
             styles.bar,
             {
@@ -68,7 +64,6 @@ const SimpleCarousel = (props) => {
     barArray.push(thisBar);
     // console.log('barArray', barArray);
   });
-
   return (
     <View
       style={styles.container}
@@ -89,7 +84,11 @@ const SimpleCarousel = (props) => {
         <View
           style={styles.skip}
         >
-          {/* <Text style={{backgroundColor: '#fff', color: '#F44', textAlign: 'center', alignItems: 'center',
+          {/* <Text
+            style={{backgroundColor: '#fff',
+            color: '#F44',
+            textAlign: 'center',
+            alignItems: 'center',
             justifyContent: 'center'}}>skip</Text> */}
         </View>
       </ScrollView>
@@ -101,7 +100,6 @@ const SimpleCarousel = (props) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -137,4 +135,8 @@ const styles = StyleSheet.create({
   },
 });
 
+// proptypes here
+SimpleCarousel.propTypes = {
+  images: PropTypes.array,
+};
 export default SimpleCarousel;

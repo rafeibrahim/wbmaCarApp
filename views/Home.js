@@ -3,35 +3,32 @@ import List from '../components/List';
 import {MediaContext} from '../contexts/MediaContext';
 import PropTypes from 'prop-types';
 import {View, Picker, Item} from 'native-base';
-import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels} from '../constants/optionsConst';
+import {bmwModels,
+  toyotaModels,
+  audiModels,
+  mercedesModels,
+  hondaModels,
+  yearList} from '../constants/optionsConst';
 
 const Home = (props) => {
+/*   initial filters to show right options
+  in filter pickers during first render. */
   const initialFilters = {
     make: 'Profile',
     model: '',
     year: 'Select Year',
     sort: '',
   };
+
   const {navigation} = props;
   const [filters, setFilters] = useState(initialFilters);
   const [media, setMedia] = useContext(MediaContext);
 
-  const yearArrayConstructor = () => {
-    let yearArray = ['Select Year'];
-    for (let i = 2020; i > 1969; i--) {
-      yearArray = [...yearArray, i];
-    }
-    return yearArray;
-  };
-
-  const yearList = yearArrayConstructor();
-  console.log('yearList', yearList);
-
+  // function for displaying right model picker as per user make selection
   const displayModelPicker = () => {
     if (filters.make === 'Profile') {
       return null;
     }
-
     let displayModels = [];
     if (filters.make === 'Bmw' ) {
       displayModels = bmwModels;
@@ -44,7 +41,6 @@ const Home = (props) => {
     } else if (filters.make === 'Honda') {
       displayModels = hondaModels;
     }
-
     return <View style={{width: '100%', height: 40}}>
       <Picker
         mode="dropdown"
@@ -69,6 +65,8 @@ const Home = (props) => {
     </View>;
   };
 
+  /* function responsile for setting context media (homeScreenFitlers) as
+  filters state of this component changes */
   useEffect(() => {
     setMedia((mediia) => ({
       ...media,
@@ -102,44 +100,6 @@ const Home = (props) => {
         </Picker>
       </View>
       {displayModelPicker()}
-      {/* {filters.make === 'Bmw' &&
-      <Picker
-        mode="dropdown"
-        selectedValue={filters.model}
-        style={{width: '100%'}}
-        onValueChange={(itemValue, itemIndex) => {
-          console.log(itemValue);
-          setFilters((filters) =>
-            ({
-              ...filters,
-              model: itemValue,
-            }));
-        }
-        }>
-        {bmwModels.map((m) => {
-          return <Picker.Item label={m.modelLabel} value={m.model}/>
-        })}
-      </Picker>
-      }
-      {filters.make === 'Bmw' &&
-      <Picker
-        mode="dropdown"
-        selectedValue={filters.model}
-        style={{width: '100%'}}
-        onValueChange={(itemValue, itemIndex) => {
-          console.log(itemValue);
-          setFilters((filters) =>
-            ({
-              ...filters,
-              model: itemValue,
-            }));
-        }
-        }>
-        {bmwModels.map((m) => {
-          return <Picker.Item label={m.modelLabel} value={m.model}/>
-        })}
-      </Picker>
-      } */}
       <View style={{width: '100%', height: 40}}>
         <Picker
           mode="dropdown"
@@ -155,7 +115,9 @@ const Home = (props) => {
           }
           }>
           {yearList.map((year) => {
-            return <Picker.Item label={year + ''} value={year} key={(item, index) => index.toString()}/>;
+            return <Picker.Item
+              label={year + ''}
+              value={year} key={(item, index) => index.toString()}/>;
           })}
         </Picker>
       </View>

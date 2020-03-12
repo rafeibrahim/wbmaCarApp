@@ -1,3 +1,4 @@
+// file for storing options to be displayed in pickers
 const bmwModels = [
   {'model': '', 'modelLabel': 'Select Model'},
   {'model': 'Bmw118', 'modelLabel': '118'},
@@ -45,7 +46,7 @@ const engineArrayConstructor = () => {
 };
 
 const engineList = engineArrayConstructor();
-console.log('engineList', engineList);
+// console.log('engineList', engineList);
 
 const yearArrayConstructor = () => {
   let yearArray = ['Select Year'];
@@ -56,7 +57,7 @@ const yearArrayConstructor = () => {
 };
 
 const yearList = yearArrayConstructor();
-console.log('yearList', yearList);
+// console.log('yearList', yearList);
 
 const mileageArrayConstructor = () => {
   let mileageArray = ['Select Mileage'];
@@ -66,6 +67,13 @@ const mileageArrayConstructor = () => {
   return mileageArray;
 };
 const mileageList = mileageArrayConstructor();
-console.log('mileageList', mileageList);
+// console.log('mileageList', mileageList);
 
-export {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, engineList, yearList, mileageList};
+export {bmwModels,
+  toyotaModels,
+  audiModels,
+  mercedesModels,
+  hondaModels,
+  engineList,
+  yearList,
+  mileageList};

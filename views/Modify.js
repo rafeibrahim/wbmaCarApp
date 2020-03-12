@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {
   Content,
   Form,
@@ -13,7 +13,6 @@ import {
 
 import {
   Dimensions,
-  Image,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import FormTextInput from '../components/FormTextInput';
@@ -21,20 +20,29 @@ import useUploadForm from '../hooks/UploadHooks';
 import {MediaContext} from '../contexts/MediaContext';
 import {validateField} from '../utils/validation';
 import {uploadConstraints} from '../constants/validationConst';
-import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, engineList, yearList, mileageList} from '../constants/optionsConst';
+import {bmwModels,
+  toyotaModels,
+  audiModels,
+  mercedesModels,
+  hondaModels,
+  engineList,
+  yearList,
+  mileageList}
+  from '../constants/optionsConst';
 import {mediaURL} from '../constants/urlConst';
 import AsyncImage from '../components/AsyncImage';
-import {Video} from 'expo-av';
 
 const deviceHeight = Dimensions.get('window').height;
 
 const Modify = (props) => {
   const [media, setMedia] = useContext(MediaContext);
-  const [send, setSend] = useState(false);
+  const file = props.navigation.state.params.file;
+  const getMedia = props.navigation.state.params.getMedia;
+  const descriptionObject = file.description;
+  // for testing purpose only
+  // console.log('descriptionObject', descriptionObject);
 
   const {
-    handleTitleChange,
-    handleDescriptionChange,
     handleMakeChange,
     handleModelChange,
     handleYearChange,
@@ -42,7 +50,6 @@ const Modify = (props) => {
     handleMileageChange,
     handleGearboxChange,
     handleFuelChange,
-    handleRegNoChange,
     handlePriceChange,
     handleModify,
     inputs,
@@ -52,11 +59,11 @@ const Modify = (props) => {
     loading,
   } = useUploadForm();
 
+  // function for displaying right model picker as per user make selection
   const displayModelPicker = () => {
     if (inputs.make === '' || inputs.make === undefined) {
       return null;
     }
-
     let displayModels = [];
     if (inputs.make === 'Bmw' ) {
       displayModels = bmwModels;
@@ -72,7 +79,12 @@ const Modify = (props) => {
 
     return <>
       <Item style={{margin: 10}}>
-        <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+        <View
+          style={{width: '100%',
+            height: 40,
+            borderWidth: 1,
+            borderColor: 'black',
+            alignItems: 'center'}}>
           <Picker
             mode="dropdown"
             selectedValue={inputs.model}
@@ -80,15 +92,13 @@ const Modify = (props) => {
             onValueChange={(itemValue, itemIndex) => {
               console.log(itemValue);
               handleModel(itemValue);
-              // setFilters((filters) =>
-              //   ({
-              //     ...filters,
-              //     model: itemValue,
-              //   }));
             }
             }>
             {displayModels.map((m) => {
-              return <Picker.Item label={m.modelLabel} value={m.model}/>
+              return <Picker.Item
+                label={m.modelLabel}
+                value={m.model}
+                key={(item, index) => index.toString()}/>;
             })}
           </Picker>
         </View>
@@ -99,12 +109,12 @@ const Modify = (props) => {
     </>;
   };
 
-
   const validationProperties = {
     title: {title: inputs.title},
     description: {description: inputs.description},
   };
 
+  // for validation of regNo and price fields
   const validate = (field, value) => {
     console.log('vp', validationProperties[field]);
     setErrors((errors) =>
@@ -114,7 +124,8 @@ const Modify = (props) => {
             uploadConstraints),
         fetch: undefined,
       }));
-    console.log(validateField({[field]: value}, uploadConstraints));
+    // console.log(validateField({[field]: value}, uploadConstraints));
+    // returning boolean to check input fields before modify btn works
     if (validateField({[field]: value}, uploadConstraints) === undefined) {
       return true;
     } else {
@@ -122,11 +133,7 @@ const Modify = (props) => {
     }
   };
 
-  const file = props.navigation.state.params.file;
-  const getMedia = props.navigation.state.params.getMedia;
-  const descriptionObject = file.description;
-  console.log('descriptionObject', descriptionObject);
-
+  // initializing pickers with stored values of carAd which needs to be modified
   useEffect(() => {
     setInputs((inputs) =>
       ({
@@ -138,12 +145,10 @@ const Modify = (props) => {
         year: descriptionObject.year,
         mileage: descriptionObject.mileage,
         gearbox: descriptionObject.gearbox,
+        engine: descriptionObject.engine,
+        fuel: descriptionObject.fuel,
       }));
   }, []);
-
-  useEffect(() => {
-    console.log('inputs', inputs);
-  }, [inputs]);
 
   const handleMake = (text) => {
     handleMakeChange(text);
@@ -180,26 +185,12 @@ const Modify = (props) => {
     checkPickerError('fuel', text);
   };
 
-  const handleRegNo = (text) => {
-    handleRegNoChange(text);
-    validate('regNo', text);
-  };
-
   const handlePrice = (text) => {
     handlePriceChange(text);
     validate('price', text);
   };
 
-  // const handleTitle = (text) => {
-  //   handleTitleChange(text);
-  //   validate('title', text);
-  // };
-
-  // const handleDescription = (text) => {
-  //   handleDescriptionChange(text);
-  //   validate('description', text);
-  // };
-
+  // checking if the picker value is empty or not
   const checkPickerError = (field, picker) => {
     if (picker === '') {
       setErrors((errors) => ({
@@ -216,15 +207,18 @@ const Modify = (props) => {
   };
 
   const modify = () => {
+    // validating all fields before activating modify btn
     const priceOK = validate('price', inputs.price);
     const makeOK = checkPickerError('make', inputs.make);
     const modelOK = checkPickerError('model', inputs.model);
     const yearOK = checkPickerError('year', inputs.year);
     const mileageOK = checkPickerError('mileage', inputs.mileage);
     const gearboxOK = checkPickerError('gearbox', inputs.gearbox);
-    // console.log('reg field errors', errors);
-    // console.log('makeOK', makeOK, modelOK, yearOK, mileageOK, gearboxOK);
-    if (priceOK && makeOK && modelOK && yearOK && mileageOK && gearboxOK) {
+    const fuelOK = checkPickerError('fuel', inputs.fuel);
+    const engineOK = checkPickerError('engine', inputs.engine);
+
+    if (priceOK && makeOK && modelOK && yearOK &&
+      mileageOK && gearboxOK && fuelOK && engineOK) {
       console.log('modify btn working');
       setErrors((errors) => ({
         ...errors,
@@ -240,23 +234,16 @@ const Modify = (props) => {
     }
   };
 
-  // const checkErrors = () => {
-  //   console.log('errors', errors);
-  //   if (errors.title !== undefined ||
-  //     errors.description !== undefined) {
-  //     setSend(false);
-  //   } else {
-  //     setSend(true);
-  //   }
-  // };
+  // for testing purposes only
+  // useEffect(() => {
+  //   console.log('inputs', inputs);
+  // }, [inputs]);
 
-  useEffect(() => {
-    // checkErrors();
-    console.log('inputs', inputs);
-    console.log('errors from useEffect', errors);
-  }, [errors]);
-
-  console.log('send', send);
+  // for testing purposes only
+  // useEffect(() => {
+  //   console.log('inputs', inputs);
+  //   console.log('errors from useEffect', errors);
+  // }, [errors]);
 
   return (
     <Content>
@@ -272,14 +259,6 @@ const Modify = (props) => {
             spinnerColor='#777'
             source={{uri: mediaURL + file.filename}}
           />
-          {/* <Item>
-            <FormTextInput
-              placeholder='Title'
-              onChangeText={handleTitle}
-              value={inputs.title}
-              error={errors.title}
-            />
-          </Item> */}
           <FormTextInput
             placeholder='Price'
             onChangeText={handlePrice}
@@ -287,7 +266,12 @@ const Modify = (props) => {
             error={errors.price}
           />
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.make}
@@ -296,12 +280,6 @@ const Modify = (props) => {
                 onValueChange={(itemValue, itemIndex) => {
                   console.log(itemValue);
                   handleMake(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     make: itemValue,
-                  //     model: '',
-                  //   }));
                 }
                 }>
                 <Item label="Select Make" value="" />
@@ -314,11 +292,20 @@ const Modify = (props) => {
             </View>
           </Item>
           {errors.make &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.make}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.make}</Text>
+            </Badge>
           }
           {displayModelPicker()}
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.year}
@@ -326,29 +313,33 @@ const Modify = (props) => {
                 onValueChange={(itemValue, itemIndex) => {
                   console.log(itemValue);
                   handleYear(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     year: itemValue,
-                  //   }));
                 }
                 }>
                 {yearList.map((year) => {
-                  // console.log(years.reverse());
-                  // console.log('year', year);
                   if (year === 'Select Year') {
                     return <Picker.Item label={year} value=''/>;
                   }
-                  return <Picker.Item label={year + ''} value={year} key={(item, index) => index.toString()}/>;
+                  return <Picker.Item
+                    label={year + ''}
+                    value={year}
+                    key={(item, index) => index.toString()}/>;
                 })}
               </Picker>
             </View>
           </Item>
           {errors.year &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.year}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.year}</Text>
+            </Badge>
           }
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40, borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.mileage}
@@ -356,29 +347,37 @@ const Modify = (props) => {
                 onValueChange={(itemValue, itemIndex) => {
                   console.log(itemValue);
                   handleMileage(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     year: itemValue,
-                  //   }));
                 }
                 }>
                 {mileageList.map((mileage) => {
-                  // console.log(years.reverse());
-                  // console.log('year', year);
                   if (mileage === 'Select Mileage') {
-                    return <Picker.Item label={mileage} value=''/>;
+                    return <Picker.Item
+                      label={mileage}
+                      value=''
+                      key={(item, index) => index.toString()}/>;
                   }
-                  return <Picker.Item label={mileage + ''} value={mileage} key={(item, index) => index.toString()}/>;
+                  return <Picker.Item
+                    label={mileage + ''}
+                    value={mileage}
+                    key={(item, index) => index.toString()}/>;
                 })}
               </Picker>
             </View>
           </Item>
           {errors.mileage &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.mileage}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.mileage}</Text>
+            </Badge>
           }
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.gearbox}
@@ -387,12 +386,6 @@ const Modify = (props) => {
                 onValueChange={(itemValue, itemIndex) => {
                   console.log(itemValue);
                   handleGearbox(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     make: itemValue,
-                  //     model: '',
-                  //   }));
                 }
                 }>
                 <Item label="Select Gearbox" value="" />
@@ -402,10 +395,19 @@ const Modify = (props) => {
             </View>
           </Item>
           {errors.gearbox &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.gearbox}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.gearbox}</Text>
+            </Badge>
           }
-                    <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+          <Item style={{margin: 10}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.fuel}
@@ -414,12 +416,6 @@ const Modify = (props) => {
                 onValueChange={(itemValue, itemIndex) => {
                   console.log(itemValue);
                   handleFuel(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     make: itemValue,
-                  //     model: '',
-                  //   }));
                 }
                 }>
                 <Item label="Select Fuel Type" value="" />
@@ -431,43 +427,58 @@ const Modify = (props) => {
             </View>
           </Item>
           {errors.fuel &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.fuel}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.fuel}</Text>
+            </Badge>
           }
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={
+                {width: '100%',
+                  height: 40,
+                  borderWidth: 1,
+                  borderColor: 'black',
+                  alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.engine}
                 style={{width: '100%'}}
                 onValueChange={(itemValue, itemIndex) => {
-                  console.log(itemValue);
                   handleEngine(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     year: itemValue,
-                  //   }));
                 }
                 }>
                 {engineList.map((engine) => {
-                  // console.log(years.reverse());
-                  // console.log('year', year);
                   if (engine === 'Select Engine Capacity') {
-                    return <Picker.Item label={engine} value=''/>;
+                    return <Picker.Item
+                      label={engine}
+                      value=''
+                      key={(item, index) => index.toString()}/>;
                   }
-                  return <Picker.Item label={engine} value={engine} key={(item, index) => index.toString()}/>;
+                  return <Picker.Item
+                    label={engine}
+                    value={engine}
+                    key={(item, index) => index.toString()}/>;
                 })}
               </Picker>
             </View>
           </Item>
           {errors.engine &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.engine}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.engine}</Text>
+            </Badge>
           }
           <Button full onPress={modify}>
-            <Text>Modify</Text>
+            <Text>Modify Ad</Text>
           </Button>
           {errors.inputsError &&
-            <Badge style={{width: '100%'}}><Text>{errors.inputsError}</Text></Badge>
+            <Badge
+              style={{width: '100%'}}>
+              <Text>{errors.inputsError}</Text>
+            </Badge>
           }
         </Form>
       )}

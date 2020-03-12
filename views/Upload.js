@@ -24,7 +24,14 @@ import useUploadForm from '../hooks/UploadHooks';
 import {MediaContext} from '../contexts/MediaContext';
 import {validateField} from '../utils/validation';
 import {uploadConstraints} from '../constants/validationConst';
-import {bmwModels, toyotaModels, audiModels, mercedesModels, hondaModels, engineList, yearList, mileageList} from '../constants/optionsConst';
+import {bmwModels,
+  toyotaModels,
+  audiModels,
+  mercedesModels,
+  hondaModels,
+  engineList,
+  yearList,
+  mileageList} from '../constants/optionsConst';
 import {getAdsByTag} from '../hooks/APIHooks';
 const deviceHeight = Dimensions.get('window').height;
 
@@ -35,11 +42,8 @@ const Upload = (props) => {
   const [image3, setImage3] = useState(null);
   const [image4, setImage4] = useState(null);
   const [image5, setImage5] = useState(null);
-  const [send, setSend] = useState(true);
 
   const {
-    handleTitleChange,
-    handleDescriptionChange,
     handleMakeChange,
     handleModelChange,
     handleYearChange,
@@ -77,7 +81,12 @@ const Upload = (props) => {
 
     return <>
       <Item style={{margin: 10}}>
-        <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+        <View
+          style={{width: '100%',
+            height: 40,
+            borderWidth: 1,
+            borderColor: 'black',
+            alignItems: 'center'}}>
           <Picker
             mode="dropdown"
             selectedValue={inputs.model}
@@ -85,25 +94,28 @@ const Upload = (props) => {
             onValueChange={(itemValue, itemIndex) => {
               console.log(itemValue);
               handleModel(itemValue);
-              // setFilters((filters) =>
-              //   ({
-              //     ...filters,
-              //     model: itemValue,
-              //   }));
             }
             }>
             {displayModels.map((m) => {
-              return <Picker.Item label={m.modelLabel} value={m.model}/>
+              return <Picker.Item
+                label={m.modelLabel}
+                value={m.model}
+                key={(item, index) => index.toString()}/>;
             })}
           </Picker>
         </View>
       </Item>
       {errors.model &&
-      <Badge warning style={{width: '100%'}}><Text>{errors.model}</Text></Badge>
+      <Badge
+        warning
+        style={{width: '100%'}}>
+        <Text>{errors.model}</Text>
+      </Badge>
       }
     </>;
   };
 
+  // for validation of regNo and price fields
   const validationProperties = {
     title: {title: inputs.title},
     description: {description: inputs.description},
@@ -118,7 +130,8 @@ const Upload = (props) => {
             uploadConstraints),
         fetch: undefined,
       }));
-    console.log(validateField({[field]: value}, uploadConstraints));
+    // console.log(validateField({[field]: value}, uploadConstraints));
+    // returning boolean to check input fields before modify btn works
     if (validateField({[field]: value}, uploadConstraints) === undefined) {
       return true;
     } else {
@@ -226,16 +239,6 @@ const Upload = (props) => {
     validate('price', text);
   };
 
-  const handleTitle = (text) => {
-    handleTitleChange(text);
-    validate('title', text);
-  };
-
-  // const handleDescription = (text) => {
-  //   handleDescriptionChange(text);
-  //   validate('description', text);
-  // };
-
   const checkPhotoError = (field, image) => {
     if (image === null) {
       setErrors((errors) => ({
@@ -287,6 +290,7 @@ const Upload = (props) => {
 
 
   const upload = async () => {
+    // validating all fields before activating upload btn
     const regNoOK = validate('regNo', inputs.regNo);
     const priceOK = validate('price', inputs.price);
     const makeOK = checkPickerError('make', inputs.make);
@@ -305,8 +309,10 @@ const Upload = (props) => {
     if (regNoOK) {
       regNoStatusOK = await regNoAvailable(inputs.regNo);
     }
-
-    if (regNoOK && priceOK && makeOK && modelOK && yearOK && engineOK && mileageOK && gearboxOK && fuelOK && imageProfileOK && image2OK && image3OK && image4OK && image5OK) {
+    if (regNoOK && priceOK && makeOK && modelOK &&
+       yearOK && engineOK && mileageOK && gearboxOK &&
+       fuelOK && imageProfileOK && image2OK && image3OK &&
+       image4OK && image5OK) {
       console.log('inputsSetError still running');
       setErrors((errors) => ({
         ...errors,
@@ -319,29 +325,28 @@ const Upload = (props) => {
       }));
     }
     console.log('reg field errors', errors);
-    if (regNoOK && priceOK && makeOK && modelOK && yearOK && engineOK && mileageOK && gearboxOK && fuelOK && imageProfileOK && image2OK && image3OK && image4OK && image5OK && regNoStatusOK) {
+    if (regNoOK && priceOK && makeOK && modelOK && yearOK && engineOK &&
+       mileageOK && gearboxOK && fuelOK && imageProfileOK && image2OK &&
+       image3OK && image4OK && image5OK && regNoStatusOK) {
       console.log('upload btn working');
-      handleUpload(imageProfile, image2, image3, image4, image5, props.navigation, setMedia);
+      handleUpload(imageProfile,
+          image2,
+          image3,
+          image4,
+          image5,
+          props.navigation,
+          setMedia);
+      // need to be determined whether reset should be called or not
       // reset();
     } else {
       console.log('upload btn not working');
     }
   };
 
-  const checkErrors = () => {
-    console.log('errors', errors);
-    if (errors.title !== undefined ||
-      errors.description !== undefined) {
-      setSend(false);
-    } else {
-      setSend(true);
-    }
-  };
-
-  useEffect(() => {
-    //checkErrors();
-    console.log('errors from useEffect', errors);
-  }, [errors]);
+  // for testing purpose
+  // useEffect(() => {
+  //   console.log('errors from useEffect', errors);
+  // }, [errors]);
 
   useEffect(() => {
     checkPhotoError('imageProfile', imageProfile);
@@ -350,8 +355,6 @@ const Upload = (props) => {
     checkPhotoError('image4', image4);
     checkPhotoError('image5', image5);
   }, [imageProfile, image2, image3, image4, image5]);
-
-  console.log('send', send);
 
   return (
     <Content>
@@ -376,21 +379,19 @@ const Upload = (props) => {
           />
 
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.make}
                 style={{width: '100%'}}
                 itemStyle={{height: 44}}
                 onValueChange={(itemValue, itemIndex) => {
-                  console.log(itemValue);
                   handleMake(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     make: itemValue,
-                  //     model: '',
-                  //   }));
                 }
                 }>
                 <Item label="Select Make" value="" />
@@ -403,11 +404,20 @@ const Upload = (props) => {
             </View>
           </Item>
           {errors.make &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.make}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.make}</Text>
+            </Badge>
           }
           {displayModelPicker()}
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.year}
@@ -415,73 +425,83 @@ const Upload = (props) => {
                 onValueChange={(itemValue, itemIndex) => {
                   console.log(itemValue);
                   handleYear(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     year: itemValue,
-                  //   }));
                 }
                 }>
                 {yearList.map((year) => {
-                  // console.log(years.reverse());
-                  // console.log('year', year);
                   if (year === 'Select Year') {
-                    return <Picker.Item label={year} value=''/>;
+                    return <Picker.Item
+                      label={year}
+                      value=''
+                      key={(item, index) => index.toString()}/>;
                   }
-                  return <Picker.Item label={year + ''} value={year} key={(item, index) => index.toString()}/>;
+                  return <Picker.Item
+                    label={year + ''}
+                    value={year}
+                    key={(item, index) => index.toString()}/>;
                 })}
               </Picker>
             </View>
           </Item>
           {errors.year &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.year}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.year}</Text>
+            </Badge>
           }
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.mileage}
                 style={{width: '100%'}}
                 onValueChange={(itemValue, itemIndex) => {
-                  console.log(itemValue);
+                  // console.log(itemValue);
                   handleMileage(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     year: itemValue,
-                  //   }));
                 }
                 }>
                 {mileageList.map((mileage) => {
-                  // console.log(years.reverse());
-                  // console.log('year', year);
                   if (mileage === 'Select Mileage') {
-                    return <Picker.Item label={mileage} value=''/>;
+                    return <Picker.Item
+                      label={mileage}
+                      value=''
+                      key={(item, index) => index.toString()}/>;
                   }
-                  return <Picker.Item label={mileage + ''} value={mileage} key={(item, index) => index.toString()}/>;
+                  return <Picker.Item
+                    label={mileage + ''}
+                    value={mileage}
+                    key={(item, index) => index.toString()}/>;
                 })}
               </Picker>
             </View>
           </Item>
           {errors.mileage &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.mileage}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.mileage}</Text>
+            </Badge>
           }
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.gearbox}
                 style={{width: '100%'}}
                 itemStyle={{height: 44}}
                 onValueChange={(itemValue, itemIndex) => {
-                  console.log(itemValue);
+                  // console.log(itemValue);
                   handleGearbox(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     make: itemValue,
-                  //     model: '',
-                  //   }));
                 }
                 }>
                 <Item label="Select Gearbox" value="" />
@@ -491,24 +511,27 @@ const Upload = (props) => {
             </View>
           </Item>
           {errors.gearbox &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.gearbox}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.gearbox}</Text>
+            </Badge>
           }
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.fuel}
                 style={{width: '100%'}}
                 itemStyle={{height: 44}}
                 onValueChange={(itemValue, itemIndex) => {
-                  console.log(itemValue);
+                  // console.log(itemValue);
                   handleFuel(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     make: itemValue,
-                  //     model: '',
-                  //   }));
                 }
                 }>
                 <Item label="Select Fuel Type" value="" />
@@ -520,10 +543,19 @@ const Upload = (props) => {
             </View>
           </Item>
           {errors.fuel &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.fuel}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.fuel}</Text>
+            </Badge>
           }
           <Item style={{margin: 10}}>
-            <View style={{width: '100%', height: 40, borderWidth: 1, borderColor: 'black', alignItems: 'center'}}>
+            <View
+              style={{width: '100%',
+                height: 40,
+                borderWidth: 1,
+                borderColor: 'black',
+                alignItems: 'center'}}>
               <Picker
                 mode="dropdown"
                 selectedValue={inputs.engine}
@@ -531,103 +563,144 @@ const Upload = (props) => {
                 onValueChange={(itemValue, itemIndex) => {
                   console.log(itemValue);
                   handleEngine(itemValue);
-                  // setFilters((filters) =>
-                  //   ({
-                  //     ...filters,
-                  //     year: itemValue,
-                  //   }));
                 }
                 }>
                 {engineList.map((engine) => {
-                  // console.log(years.reverse());
-                  // console.log('year', year);
                   if (engine === 'Select Engine Capacity') {
-                    return <Picker.Item label={engine} value=''/>;
+                    return <Picker.Item
+                      label={engine}
+                      value=''
+                      key={(item, index) => index.toString()}/>;
                   }
-                  return <Picker.Item label={engine} value={engine} key={(item, index) => index.toString()}/>;
+                  return <Picker.Item
+                    label={engine}
+                    value={engine}
+                    key={(item, index) => index.toString()}/>;
                 })}
               </Picker>
             </View>
           </Item>
           {errors.engine &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.engine}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.engine}</Text>
+            </Badge>
           }
-          {/* <Item>
-            <FormTextInput
-              placeholder='Title'
-              onChangeText={handleTitle}
-              value={inputs.title}
-              error={errors.title}
-            />
-          </Item>
-          <Item>
-            <FormTextInput
-              placeholder='Description'
-              onChangeText={handleDescription}
-              value={inputs.description}
-              error={errors.description}
-            />
-          </Item> */}
           {imageProfile &&
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <Image source={{uri: imageProfile.uri}}
-            style={{width: '100%', height: deviceHeight / 3}}/>
+            <Image source={{uri: imageProfile.uri}}
+              style={{width: '100%', height: deviceHeight / 3}}/>
           </View>
           }
-          <Button style={{borderWidth: 1, borderColor: 'black', marginTop: 2}} full onPress={() => pickImage('profileImage')}>
+          <Button
+            style={{borderWidth: 1,
+              borderColor: 'black',
+              marginTop: 2}}
+            full onPress={() => pickImage('profileImage')}>
             <Text>Select Photo 1 (Profile)</Text>
           </Button>
           {errors.imageProfile &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.imageProfile}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.imageProfile}</Text>
+            </Badge>
           }
           {image2 &&
           <Image source={{uri: image2.uri}}
             style={{width: '100%', height: deviceHeight / 3}}/>
           }
-          <Button style={{borderWidth: 1, borderColor: 'black', marginTop: 2}} full onPress={() => pickImage('image2')}>
+          <Button
+            style={{borderWidth: 1,
+              borderColor: 'black',
+              marginTop: 2}}
+            full onPress={() => pickImage('image2')}>
             <Text>Select Photo 2</Text>
           </Button>
           {errors.image2 &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.image2}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.image2}</Text>
+            </Badge>
           }
           {image3 &&
           <Image source={{uri: image3.uri}}
             style={{width: '100%', height: deviceHeight / 3}}/>
           }
-          <Button style={{borderWidth: 1, borderColor: 'black', marginTop: 2}} full onPress={() => pickImage('image3')}>
+          <Button
+            style={{borderWidth: 1,
+              borderColor: 'black',
+              marginTop: 2}}
+            full onPress={() => pickImage('image3')}>
             <Text>Select Photo 3</Text>
           </Button>
           {errors.image3 &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.image3}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.image3}</Text>
+            </Badge>
           }
           {image4 &&
           <Image source={{uri: image4.uri}}
             style={{width: '100%', height: deviceHeight / 3}}/>
           }
-          <Button style={{borderWidth: 1, borderColor: 'black', marginTop: 2}} full onPress={() => pickImage('image4')}>
+          <Button
+            style={{borderWidth: 1,
+              borderColor: 'black',
+              marginTop: 2}}
+            full
+            onPress={() => pickImage('image4')}>
             <Text>Select Photo 4</Text>
           </Button>
           {errors.image4 &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.image4}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.image4}</Text>
+            </Badge>
           }
           {image5 &&
           <Image source={{uri: image5.uri}}
             style={{width: '100%', height: deviceHeight / 3}}/>
           }
-          <Button style={{borderWidth: 1, borderColor: 'black', marginTop: 2}} full onPress={() => pickImage('image5')}>
+          <Button
+            style={{borderWidth: 1,
+              borderColor: 'black',
+              marginTop: 2}}
+            full
+            onPress={() => pickImage('image5')}>
             <Text>Select Photo 5</Text>
           </Button>
           {errors.image5 &&
-            <Badge warning style={{width: '100%'}}><Text>{errors.image5}</Text></Badge>
+            <Badge
+              warning
+              style={{width: '100%'}}>
+              <Text>{errors.image5}</Text>
+            </Badge>
           }
-          <Button style={{borderWidth: 1, borderColor: 'black', marginTop: 2}} full success onPress={upload}>
+          <Button
+            style={{borderWidth: 1,
+              borderColor: 'black',
+              marginTop: 2}}
+            full
+            success
+            onPress={upload}>
             <Text>Post Ad</Text>
           </Button>
           {errors.inputsError &&
-            <Badge style={{width: '100%'}}><Text>{errors.inputsError}</Text></Badge>
+            <Badge
+              style={{width: '100%'}}>
+              <Text>{errors.inputsError}</Text>
+            </Badge>
           }
           {errors.regNoError &&
-            <Badge style={{width: '100%'}}><Text>{errors.regNoError}</Text></Badge>
+            <Badge
+              style={{width: '100%'}}>
+              <Text>{errors.regNoError}</Text>
+            </Badge>
           }
           <Button
             style={{borderWidth: 1, borderColor: 'black', marginTop: 2}}

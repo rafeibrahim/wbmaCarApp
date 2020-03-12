@@ -129,7 +129,9 @@ const useUploadForm = () => {
 
     const profileImageFilename = profileImageFile.uri.split('/').pop();
     const profileImageMatch = /\.(\w+)$/.exec(profileImageFilename);
-    let profileImageType = profileImageMatch ? `image/${profileImageMatch[1]}` : `image`;
+    let profileImageType = profileImageMatch ?
+     `image/${profileImageMatch[1]}` :
+      `image`;
     // fix jpg mimetype
     if (profileImageType === 'image/jpg') {
       profileImageType = 'image/jpeg';
