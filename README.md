@@ -38,3 +38,7 @@ API base url: http://media.mw.metropolia.fi/wbma
 
 Media files location: http://media.mw.metropolia.fi/wbma/uploads/
 
+# Technologies Used
+
+React Native, Expo
+
