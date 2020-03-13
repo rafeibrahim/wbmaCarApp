@@ -5,10 +5,7 @@
 # Home Screen Functionality
 1. Car ads displayed on home screen
 2. Filter Functionality on home screen 
-  Filter available:
-  1. Car Make
-  2. Car Model
-  3. Car Year
+  Filter available: (Car make, Car model, Year)
 3. Sorting Functionality on home screen:
    1. Sort by top favourite
    1. Sort by increasing and decreasing price
